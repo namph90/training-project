@@ -1,15 +1,16 @@
 <?php
-   session_start();
-   include "application/Connection.php";
-      include "application/Controller.php";
-      $controller = isset($_GET["controller"]) ? $_GET["controller"] : "Home";
-      $action = isset($_GET["action"]) ? $_GET["action"] : "index";
-      $controllerFile = "controllers/".ucfirst($controller)."Controller.php";
-      if (file_exists($controllerFile)) {
-         include $controllerFile;
-         $controllerClass = ucfirst($controller)."Controller";
-         $obj = new $controllerClass();
-         $obj->$action();
-      } else die("File $controllerFile không tồn tại");
-      //---
- ?>
+session_start();
+require_once('connection.php');
+
+if (isset($_GET['controller'])) {
+    $controller = $_GET['controller'];
+    if (isset($_GET['action'])) {
+        $action = $_GET['action'];
+    } else {
+        $action = 'index';
+    }
+} else {
+    $controller = 'admin';
+    $action = 'index';
+}
+require_once('routes.php');
