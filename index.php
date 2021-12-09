@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once('connection.php');
+require_once('models/Validated.php');
 
 if (isset($_GET['controller'])) {
     $controller = $_GET['controller'];
@@ -10,7 +11,7 @@ if (isset($_GET['controller'])) {
         $action = 'index';
     }
 } else {
-    $controller = 'admin';
+    $controller = 'home';
     $action = 'index';
 }
-require_once('routes.php');
+require_once('routes/routes.php');

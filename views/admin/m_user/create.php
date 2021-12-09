@@ -8,7 +8,7 @@ $this->fileLayout = "layouts/home.php";
             <section class="content">
                 <div class="col-md-12">
                     <div class="panel panel-primary">
-                        <div class="panel-heading" style="margin-bottom: 50px;"><h4><?php echo $_GET['action']=='create' ? "Admin Create" : "Admin Edit"?></h4></div>
+                        <div class="panel-heading" style="margin-bottom: 50px;"><h4><?php echo $_GET['action']=='create' ? "User Create" : "User Edit"?></h4></div>
                         <div class="panel-body">
                             <form action="<?php echo $action; ?>" method="post"
                                   style="border: 1px solid black; padding: 20px;" enctype="multipart/form-data">
@@ -17,11 +17,18 @@ $this->fileLayout = "layouts/home.php";
                                         <div class="col-md-2">Avatar</div>
                                         <div class="col-md-10">
                                             <img id="output" class="img-rounded" alt="Ảnh" width="100"
-                                                 src="assets/upload/<?php echo isset($data->avatar)?$data->avatar: "no-image-news.png" ?>"/>
+                                                 src="<?php echo isset($data->avatar) ? "assets/upload/user/$data->id/$data->avatar" : ""?>"/>
                                             <p><label for="ufile" style="cursor: pointer;">Chọn file ảnh</label></p>
                                             <input name="avatar" id="ufile" type="file" style="display:  none;"
                                                    onchange="loadFile(event)"/>
                                         </div>
+                                        <?php if (isset($_SESSION['errCreate']['image'])) : ?>
+                                            <?php foreach ($_SESSION['errCreate']['image'] as $key => $value) : ?>
+                                                <div class="alert alert-danger" role="alert">
+                                                    <?php echo $value; ?>
+                                                </div>
+                                            <?php endforeach ?>
+                                        <?php endif ?>
                                     </div>
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2">Name</div>
@@ -41,7 +48,7 @@ $this->fileLayout = "layouts/home.php";
                                         <div class="col-md-2">Email</div>
                                         <div class="col-md-10">
                                             <input type="text" class="form-control" name="email"
-                                                   value="<?php echo isset($data->email) ? $data->email : (isset($_SESSION['dl']['email']) ? $_SESSION['dl']['email'] : "") ?>">
+                                                   value="<?php echo isset($data->email) ? $data->email : (isset($_SESSION['dl']['email']) ? $_SESSION['dl']['email'] : "") ?>" <?php if(isset($data->email)): ?> disabled <?php endif; ?>>
                                             <?php if (isset($_SESSION['errCreate']['email'])) : ?>
                                                 <?php foreach ($_SESSION['errCreate']['email'] as $key => $value) : ?>
                                                     <div class="alert alert-danger" role="alert">
@@ -69,7 +76,7 @@ $this->fileLayout = "layouts/home.php";
                                         <div class="col-md-2">Password Verify</div>
                                         <div class="col-md-10">
                                             <input type="password" class="form-control" name="password_confirm"
-                                                   value="<?php echo isset($_SESSION['dl']['password']) ? $_SESSION['dl']['password'] : "" ?>">
+                                                   value="<?php echo isset($_SESSION['dl']['password_confirm']) ? $_SESSION['dl']['password_confirm'] : "" ?>">
                                             <?php if (isset($_SESSION['errCreate']['confirmation_pwd'])) : ?>
                                                 <?php foreach ($_SESSION['errCreate']['confirmation_pwd'] as $key => $value) : ?>
                                                     <div class="alert alert-danger" role="alert">
@@ -84,12 +91,11 @@ $this->fileLayout = "layouts/home.php";
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2">Role</div>
                                         <div class="col-md-10">
-                                            <input type="radio" name="role"
-                                                   value="Super Admin" <?php echo isset($data->role) && $data->role == "Super Admin" ? "checked" : "" ?>>Super
-                                            Admin
-                                            <input type="radio" name="role"
-                                                   style="margin-left: 50px;" <?php echo isset($data->role) && $data->role == "Admin" ? "checked" : "" ?>
-                                                   value="Admin">Admin
+                                            <input type="radio" name="status"
+                                                   value="Active" <?php echo isset($data->status) && $data->status == "Active" ? "checked" : "" ?>>Active
+                                            <input type="radio" name="status"
+                                                   style="margin-left: 50px;" <?php echo isset($data->status) && $data->status == "Banned" ? "checked" : "" ?>
+                                                   value="Banned" <?php if(!isset($data->status)): ?> checked <?php endif; ?>>Banned
                                         </div>
                                     </div>
                                     <div class="row" style="margin-top:15px;">

@@ -23,7 +23,7 @@
                 Admin management
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Search</a>
+                <a class="dropdown-item" href="index.php?controller=admin&action=index">Search</a>
                 <a class="dropdown-item" href="index.php?controller=admin&action=create">Create</a>
             </div>
         </li>
@@ -32,12 +32,12 @@
                 User management
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Search</a>
-                <a class="dropdown-item" href="#">Create</a>
+                <a class="dropdown-item" href="index.php?controller=user&action=index">Search</a>
+                <a class="dropdown-item" href="index.php?controller=user&action=create">Create</a>
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="index.php?controller=admin&action=logout">Logout</a>
+            <a class="nav-link" href="index.php?controller=login&action=logout">Logout</a>
         </li>
     </ul>
 </nav>

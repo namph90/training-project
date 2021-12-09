@@ -27,6 +27,6 @@ class BaseController
     }
     public function authentication() {
         if(isset($_SESSION['admin']) == false)
-            header("location:index.php?controller=admin&action=login");
+            header("location:index.php?controller=login&action=login");
     }
 }
