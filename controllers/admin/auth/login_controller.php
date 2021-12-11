@@ -1,7 +1,7 @@
 <?php
 
 require_once('controllers/base_controller.php');
-require_once('models/AdminModel.php');
+require_once('models/admin/AdminModel.php');
 
 class LoginController extends BaseController
 {

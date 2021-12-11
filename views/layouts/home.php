@@ -11,7 +11,7 @@
     <script src="assets/vendor/bootstrap.min.js"></script>
 </head>
 <body>
-<?php if(isset($_SESSION["LoginSuccess"])): ?>
+<?php if (isset($_SESSION["LoginSuccess"])): ?>
     <?php echo $_SESSION["LoginSuccess"]; ?>
     <?php unset($_SESSION["LoginSuccess"]); ?>
 <?php endif; ?>
@@ -32,8 +32,8 @@
                 User management
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="index.php?controller=user&action=index">Search</a>
-                <a class="dropdown-item" href="index.php?controller=user&action=create">Create</a>
+                <a class="dropdown-item" href="index.php?controller=mUser&action=index">Search</a>
+                <a class="dropdown-item" href="index.php?controller=mUser&action=create">Create</a>
             </div>
         </li>
         <li class="nav-item">

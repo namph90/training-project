@@ -39,9 +39,9 @@ trait UserModel
                 move_uploaded_file($_FILES["avatar"]["tmp_name"], "assets/upload/user/$id/$avatar");
             }
             $_SESSION['success'] = "Create successfull!";
-            header("location:index.php?controller=user&action=index");
+            header("location:index.php?controller=mUser&action=index");
         } else {
-            header("location:index.php?controller=user&action=create");
+            header("location:index.php?controller=mUser&action=create");
         }
     }
 
@@ -49,17 +49,17 @@ trait UserModel
     {
         $sqlOrder = " ";
         $sqlSearch = " ";
-        if (!empty($_POST['searchName']) && empty($_POST['searchEmail'])) {
-            $searchName = $_POST['searchName'];
+        if (!empty($_GET["searchName"]) && empty($_GET["searchEmail"])) {
+            $searchName = $_GET["searchName"];
             $sqlSearch = "where name like '%$searchName%'";
         }
-        if (!empty($_POST['searchEmail']) && empty($_POST['searchName'])) {
-            $searchEmail = $_POST['searchEmail'];
+        if (!empty($_GET["searchEmail"]) && empty($_GET["searchName"])) {
+            $searchEmail = $_GET['searchEmail'];
             $sqlSearch = "where email like '%$searchEmail%'";
         }
-        if (!empty($_POST['searchEmail']) && !empty($_POST['searchName'])) {
-            $searchEmail = $_POST['searchEmail'];
-            $searchName = $_POST['searchName'];
+        if (!empty($_GET["searchEmail"]) && !empty($_GET['searchName'])) {
+            $searchEmail = $_GET['searchEmail'];
+            $searchName = $_GET['searchName'];
             $sqlSearch = "where email like '%$searchEmail%' and name like '%$searchName%'";
         }
         $order = isset($_GET["order"]) ? $_GET["order"] : "";
@@ -95,7 +95,7 @@ trait UserModel
     {
         $name = $_POST['name'];
         $password = $_POST['password'];
-        $role = $_POST['status'];
+        $status = $_POST['status'];
         $avatar = "";
         $password = md5($password);
         $conn = DB::getInstance();
@@ -117,7 +117,7 @@ trait UserModel
             $query->execute([":_password" => $password, ":_id" => $id]);
         }
         $_SESSION['success'] = "Update Successfull!";
-        header("location:index.php?controller=user&action=index");
+        header("location:index.php?controller=mUser&action=index");
     }
 
     public function deleteModel($id)
@@ -137,6 +137,6 @@ trait UserModel
             $conn->query("delete from users where id=$id");
             $_SESSION['success'] = "Delete Successfull!";
         }
-        header("location:index.php?controller=user&action=index");
+        header("location:index.php?controller=mUser&action=index");
     }
 }

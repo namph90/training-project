@@ -1,7 +1,7 @@
 <?php
 
 require_once('controllers/base_controller.php');
-require_once('models/AdminModel.php');
+require_once('models/admin/AdminModel.php');
 
 class AdminController extends BaseController
 {
@@ -9,15 +9,15 @@ class AdminController extends BaseController
 
     function __construct()
     {
-        $this->authentication();
+        $this->authenticationAdmin();
     }
 
     public function index()
     {
-        $recordPerPage = 2;
-        $numPage = ceil($this->modelTotal() / $recordPerPage);
+        $recordPerPage = 10;
         $data = $this->modelRead($recordPerPage);
-        $this->render("admin/m_admin/index", ['data' => $data, "numPage" => $numPage]);
+        $numPage = ceil($data[1] / $recordPerPage);
+        $this->render("admin/m_admin/index", ['data' => $data[0], "numPage" => $numPage]);
     }
 
     public function create()

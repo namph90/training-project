@@ -80,17 +80,18 @@ trait AdminModel
         $from = $page * $recordPerPage;
         $sqlOrder = " ";
         $sqlSearch = " ";
-        if (!empty($_POST['searchName']) && empty($_POST['searchEmail'])) {
-            $searchName = $_POST['searchName'];
+
+        if (!empty($_GET["searchName"]) && empty($_GET["searchEmail"])) {
+            $searchName = $_GET["searchName"];
             $sqlSearch = "where name like '%$searchName%'";
         }
-        if (!empty($_POST['searchEmail']) && empty($_POST['searchName'])) {
-            $searchEmail = $_POST['searchEmail'];
+        if (!empty($_GET["searchEmail"]) && empty($_GET["searchName"])) {
+            $searchEmail = $_GET['searchEmail'];
             $sqlSearch = "where email like '%$searchEmail%'";
         }
-        if (!empty($_POST['searchEmail']) && !empty($_POST['searchName'])) {
-            $searchEmail = $_POST['searchEmail'];
-            $searchName = $_POST['searchName'];
+        if (!empty($_GET["searchEmail"]) && !empty($_GET['searchName'])) {
+            $searchEmail = $_GET['searchEmail'];
+            $searchName = $_GET['searchName'];
             $sqlSearch = "where email like '%$searchEmail%' and name like '%$searchName%'";
         }
         $order = isset($_GET["order"]) ? $_GET["order"] : "";
@@ -110,8 +111,9 @@ trait AdminModel
         }
         $conn = DB::getInstance();
         $query = $conn->query("select * from admin $sqlSearch $sqlOrder limit $from,$recordPerPage");
+        $count = $conn->query("select * from admin $sqlSearch $sqlOrder ")->rowCount();
         $data = $query->fetchAll();
-        return $data;
+        return [$data, $count];
     }
 
     public function find($id)
@@ -176,12 +178,5 @@ trait AdminModel
             }
         }
         header("location:index.php?controller=admin&action=index");
-    }
-
-    public function modelTotal()
-    {
-        $conn = DB::getInstance();
-        $query = $conn->query("select id from admin");
-        return $query->rowCount();
     }
 }

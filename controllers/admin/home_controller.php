@@ -6,7 +6,7 @@ class HomeController extends BaseController
 {
     public function __construct()
     {
-        $this->authentication();
+        $this->authenticationAdmin();
     }
 
 //    public function __

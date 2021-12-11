@@ -1,15 +1,15 @@
 <?php
 
 require_once('controllers/base_controller.php');
-require_once('models/UserModel.php');
+require_once('models/admin/UserModel.php');
 
-class UserController extends BaseController
+class mUserController extends BaseController
 {
     use UserModel;
 
     function __construct()
     {
-        $this->authentication();
+        $this->authenticationAdmin();
     }
 
     public function index()
@@ -20,7 +20,7 @@ class UserController extends BaseController
 
     public function create()
     {
-        $action = "index.php?controller=user&action=createPost";
+        $action = "index.php?controller=mUser&action=createPost";
         $this->render("admin/m_user/create", ['action' => $action]);
     }
 
@@ -32,7 +32,7 @@ class UserController extends BaseController
     public function update()
     {
         $id = isset($_GET['id']) ? $_GET['id'] : "";
-        $action = "index.php?controller=user&action=updatePost&id=$id";
+        $action = "index.php?controller=mUser&action=updatePost&id=$id";
         $data = $this->find($id);
         $this->render("admin/m_user/create", ['action' => $action, 'data' => $data]);
     }

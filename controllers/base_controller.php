@@ -25,8 +25,12 @@ class BaseController
             header('Location: index.php?controller=home&action=error');
         }
     }
-    public function authentication() {
+    public function authenticationAdmin() {
         if(isset($_SESSION['admin']) == false)
             header("location:index.php?controller=login&action=login");
+    }
+    public function authenticationUser() {
+        if(!isset($_SESSION['user']))
+            header("location:index.php?controller=user&action=login");
     }
 }
