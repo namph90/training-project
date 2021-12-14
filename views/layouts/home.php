@@ -15,18 +15,21 @@
     <?php echo $_SESSION["LoginSuccess"]; ?>
     <?php unset($_SESSION["LoginSuccess"]); ?>
 <?php endif; ?>
+
 <nav class="navbar bg-light navbar-light">
 
     <ul class="nav justify-content-end">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="index.php" id="navbardrop" data-toggle="dropdown">
-                Admin management
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="index.php?controller=admin&action=index">Search</a>
-                <a class="dropdown-item" href="index.php?controller=admin&action=create">Create</a>
-            </div>
-        </li>
+        <?php if (isset($_SESSION['admin']) && $_SESSION['admin']['role'] == "Super Admin"): ?>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="index.php" id="navbardrop" data-toggle="dropdown">
+                    Admin management
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="index.php?controller=admin&action=index">Search</a>
+                    <a class="dropdown-item" href="index.php?controller=admin&action=create">Create</a>
+                </div>
+            </li>
+        <?php endif; ?>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 User management
@@ -36,6 +39,7 @@
                 <a class="dropdown-item" href="index.php?controller=mUser&action=create">Create</a>
             </div>
         </li>
+
         <li class="nav-item">
             <a class="nav-link" href="index.php?controller=login&action=logout">Logout</a>
         </li>

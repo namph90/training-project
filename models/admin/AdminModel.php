@@ -9,7 +9,7 @@ trait AdminModel
         $password = md5($password);
         $conn = DB::getInstance();
         $_SESSION['email_create'] = $_POST['email'];
-        $query = $conn->prepare("select email,id from admin where email=:_email and password=:_password");
+        $query = $conn->prepare("select email,id,role from admin where email=:_email and password=:_password");
         $query->execute(array("_email" => $email, "_password" => $password));
         $countEmail = $conn->query("select * from admin where email= '$email'");
         $countPass = $conn->query("select * from admin where email= '$email' and password = '$password'");
@@ -17,7 +17,8 @@ trait AdminModel
             $data = $query->fetch();
             $_SESSION['admin'] = array(
                 "id" => $data->id,
-                "email" => $data->email
+                "email" => $data->email,
+                "role" => $data->role
             );
             $_SESSION["LoginSuccess"] = "<script type='text/javascript'>alert('đăng nhập thành công');</script>";
             header("location:index.php");
@@ -33,10 +34,10 @@ trait AdminModel
 
     public function createModel()
     {
+
         $email = $_POST['email'];
         $conn = DB::getInstance();
         $data = $conn->query("select * from admin where email = '$email'");
-
         //validate email
         Validated::email($data->rowCount(), $_POST['email']);
         //validated name
@@ -47,6 +48,9 @@ trait AdminModel
         Validated::password_confirm($_POST['password'], $_POST['password_confirm']);
         //validated image
         Validated::image($_FILES["avatar"]);
+//        $imageData = file_get_contents($_FILES['avatar']['tmp_name']);
+//        $test = base64_encode($imageData);
+//        $_SESSION['src'] ="data:image/png;base64,$test";
         $_SESSION['dl'] = $_POST;
         if (!isset($_SESSION['errCreate'])) {
             $name = $_POST['name'];
@@ -57,6 +61,7 @@ trait AdminModel
             if ($_FILES["avatar"]["name"] != "") {
                 $avatar = time() . "_" . $_FILES["avatar"]["name"];
             }
+
             $conn = DB::getInstance();
             $query = $conn->prepare("insert into admin set name=:_name,email=:_email,password=:_password, role=:_role, avatar=:_avatar");
             $query->execute(["_name" => $name, "_email" => $email, "_password" => $password, "_role" => $role, "_avatar" => $avatar]);
@@ -68,6 +73,7 @@ trait AdminModel
                 move_uploaded_file($_FILES["avatar"]["tmp_name"], "assets/upload/admin/$id/$avatar");
             }
             $_SESSION['success'] = "Create successfull!";
+            unset($_SESSION['src']);
             header("location:index.php?controller=admin&action=index");
         } else {
             header("location:index.php?controller=admin&action=create");
@@ -83,16 +89,16 @@ trait AdminModel
 
         if (!empty($_GET["searchName"]) && empty($_GET["searchEmail"])) {
             $searchName = $_GET["searchName"];
-            $sqlSearch = "where name like '%$searchName%'";
+            $sqlSearch = "and name like '%$searchName%'";
         }
         if (!empty($_GET["searchEmail"]) && empty($_GET["searchName"])) {
             $searchEmail = $_GET['searchEmail'];
-            $sqlSearch = "where email like '%$searchEmail%'";
+            $sqlSearch = "and email like '%$searchEmail%'";
         }
         if (!empty($_GET["searchEmail"]) && !empty($_GET['searchName'])) {
             $searchEmail = $_GET['searchEmail'];
             $searchName = $_GET['searchName'];
-            $sqlSearch = "where email like '%$searchEmail%' and name like '%$searchName%'";
+            $sqlSearch = "and email like '%$searchEmail%' and name like '%$searchName%'";
         }
         $order = isset($_GET["order"]) ? $_GET["order"] : "";
         switch ($order) {
@@ -110,8 +116,8 @@ trait AdminModel
                 break;
         }
         $conn = DB::getInstance();
-        $query = $conn->query("select * from admin $sqlSearch $sqlOrder limit $from,$recordPerPage");
-        $count = $conn->query("select * from admin $sqlSearch $sqlOrder ")->rowCount();
+        $query = $conn->query("select * from admin where del_flag = 0 $sqlSearch limit $sqlOrder $from,$recordPerPage");
+        $count = $conn->query("select * from admin where del_flag = 0 $sqlSearch $sqlOrder")->rowCount();
         $data = $query->fetchAll();
         return [$data, $count];
     }
@@ -170,7 +176,7 @@ trait AdminModel
                 }
                 rmdir($target);
             }
-            $conn->query("delete from admin where id=$id");
+            $conn->query("update admin set del_flag = 1 where id=$id");
             if ($_SESSION['admin']['id'] == $id) {
                 unset($_SESSION['admin']);
             } else {

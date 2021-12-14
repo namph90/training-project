@@ -10,6 +10,7 @@ class AdminController extends BaseController
     function __construct()
     {
         $this->authenticationAdmin();
+        $this->checkRole();
     }
 
     public function index()

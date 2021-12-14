@@ -51,16 +51,16 @@ trait UserModel
         $sqlSearch = " ";
         if (!empty($_GET["searchName"]) && empty($_GET["searchEmail"])) {
             $searchName = $_GET["searchName"];
-            $sqlSearch = "where name like '%$searchName%'";
+            $sqlSearch = "and name like '%$searchName%'";
         }
         if (!empty($_GET["searchEmail"]) && empty($_GET["searchName"])) {
             $searchEmail = $_GET['searchEmail'];
-            $sqlSearch = "where email like '%$searchEmail%'";
+            $sqlSearch = "and email like '%$searchEmail%'";
         }
         if (!empty($_GET["searchEmail"]) && !empty($_GET['searchName'])) {
             $searchEmail = $_GET['searchEmail'];
             $searchName = $_GET['searchName'];
-            $sqlSearch = "where email like '%$searchEmail%' and name like '%$searchName%'";
+            $sqlSearch = "and email like '%$searchEmail%' and name like '%$searchName%'";
         }
         $order = isset($_GET["order"]) ? $_GET["order"] : "";
         switch ($order) {
@@ -78,7 +78,7 @@ trait UserModel
                 break;
         }
         $conn = DB::getInstance();
-        $query = $conn->query("select * from users $sqlSearch $sqlOrder");
+        $query = $conn->query("select * from users where del_flag = 0 $sqlSearch $sqlOrder");
         $data = $query->fetchAll();
         return $data;
     }
@@ -134,7 +134,7 @@ trait UserModel
                 }
                 rmdir($target);
             }
-            $conn->query("delete from users where id=$id");
+            $conn->query("update users set del_flag = 1 where id=$id");
             $_SESSION['success'] = "Delete Successfull!";
         }
         header("location:index.php?controller=mUser&action=index");

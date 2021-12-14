@@ -89,7 +89,7 @@ $this->fileLayout = "layouts/home.php";
                                         </div>
                                     </div>
                                     <div class="row" style="margin-top:15px;">
-                                        <div class="col-md-2">Role</div>
+                                        <div class="col-md-2">Status</div>
                                         <div class="col-md-10">
                                             <input type="radio" name="status"
                                                    value="Active" <?php echo isset($data->status) && $data->status == "Active" ? "checked" : "" ?>>Active
