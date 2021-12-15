@@ -39,7 +39,7 @@
                 <?php endif ?>
                 <?php unset($_SESSION['errorsPass']) ?>
             </div>
-            <div style="text-align: right;" class="form-group"><a href="">Login via Facebook</a></div>
+            <div style="text-align: right;" class="form-group"><a href="<?= $loginUrl ?>">Login via Facebook</a></div>
             <button class="btn btn-success" type="submit" name="submit">Login</button>
         </div>
 </div>

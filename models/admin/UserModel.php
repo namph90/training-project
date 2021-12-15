@@ -39,6 +39,7 @@ trait UserModel
                 move_uploaded_file($_FILES["avatar"]["tmp_name"], "assets/upload/user/$id/$avatar");
             }
             $_SESSION['success'] = "Create successfull!";
+            unset($_SESSION['dl']);
             header("location:index.php?controller=mUser&action=index");
         } else {
             header("location:index.php?controller=mUser&action=create");

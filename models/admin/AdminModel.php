@@ -21,7 +21,8 @@ trait AdminModel
                 "role" => $data->role
             );
             $_SESSION["LoginSuccess"] = "<script type='text/javascript'>alert('đăng nhập thành công');</script>";
-            header("location:index.php");
+            unset($_SESSION['email_create']);
+            header("location:index.php?controller=home&action=index");
         } elseif ($countEmail->rowCount() == 0) {
             $_SESSION['errorsEmail'] = "The email or password entered is not associated with any accounts. Find your account and log in.";
             header("location:index.php?controller=login&action=login");
@@ -73,7 +74,8 @@ trait AdminModel
                 move_uploaded_file($_FILES["avatar"]["tmp_name"], "assets/upload/admin/$id/$avatar");
             }
             $_SESSION['success'] = "Create successfull!";
-            unset($_SESSION['src']);
+            //unset($_SESSION['src']);
+            unset($_SESSION['dl']);
             header("location:index.php?controller=admin&action=index");
         } else {
             header("location:index.php?controller=admin&action=create");
@@ -116,7 +118,7 @@ trait AdminModel
                 break;
         }
         $conn = DB::getInstance();
-        $query = $conn->query("select * from admin where del_flag = 0 $sqlSearch limit $sqlOrder $from,$recordPerPage");
+        $query = $conn->query("select * from admin where del_flag = 0 $sqlSearch $sqlOrder limit  $from,$recordPerPage");
         $count = $conn->query("select * from admin where del_flag = 0 $sqlSearch $sqlOrder")->rowCount();
         $data = $query->fetchAll();
         return [$data, $count];

@@ -34,7 +34,7 @@ class BaseController
 
     public function authenticationUser()
     {
-        if (!isset($_SESSION['user']))
+        if (isset($_SESSION['user']) == false)
             header("location:index.php?controller=user&action=login");
     }
 

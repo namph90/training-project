@@ -2,6 +2,7 @@
 
 require_once('controllers/base_controller.php');
 require_once('models/user/User.php');
+require_once ('assets/Facebook/autoload.php');
 
 class UserController extends BaseController
 {
@@ -9,12 +10,16 @@ class UserController extends BaseController
 
     function __construct()
     {
-        //$this->authenticationUser();
+
     }
 
     public function login()
     {
-        $this->render("user/login");
+        include 'config/fbconfig.php';
+        $helper = $fb->getRedirectLoginHelper();
+        //$permissions = ['email'];
+        $loginUrl = $helper->getLoginUrl('https://phn.com/TT/MVC_Thuan/index.php?controller=user&action=loginFb');
+        $this->render("user/login",['loginUrl'=>$loginUrl]);
     }
     public function loginPost()
     {
@@ -23,7 +28,7 @@ class UserController extends BaseController
     public function logout()
     {
         unset($_SESSION["user"]);
-        header("location:index.php?controller=user&action=login");
+        header("location:login");
     }
 
     public function details()
@@ -31,5 +36,9 @@ class UserController extends BaseController
         $id = $_SESSION['user']['id'];
         $data = $this->find($id);
         $this->render("user/detail", ['data' => $data]);
+    }
+    public function loginFb()
+    {
+        $this->loginFbModel();
     }
 }
