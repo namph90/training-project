@@ -1,7 +1,9 @@
 <?php
+require_once ('models/validated/base_validated.php');
 
-class Validated
+class AdminValidated extends BaseValidated
 {
+
     public static function name($name)
     {
         if (empty(trim($name))) {
@@ -17,28 +19,6 @@ class Validated
             $_SESSION['errCreate']['password']['invaild'] = 'Password can not be blank';
         } elseif (strlen(trim($pass)) < 3 || strlen(trim($pass)) > 100) {
             $_SESSION['errCreate']['password']['invaild'] = 'Password must be between 3 and 100 characters';
-        }
-    }
-
-    public static function password_confirm($pass, $password_confirm)
-    {
-        if (!isset($_SESSION['errCreate']['password'])) {
-            if (empty(trim($password_confirm))) {
-                $_SESSION['errCreate']['confirmation_pwd']['required'] = 'Password Verify can not be blank';
-            } elseif (strlen(trim($password_confirm)) != strlen($pass)) {
-                $_SESSION['errCreate']['confirmation_pwd']['invaild'] = 'Password verify does not match';
-            }
-        }
-    }
-
-    public static function email($count, $email)
-    {
-        if (empty(trim($email))) {
-            $_SESSION['errCreate']['email']['invaild'] = 'Email can not be blank';
-        } elseif (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['errCreate']['email']['invaild'] = 'Invalid email format';
-        } elseif ($count > 0) {
-            $_SESSION['errCreate']['email']['invaild'] = 'Email exist';
         }
     }
 

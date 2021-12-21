@@ -16,19 +16,27 @@ $this->fileLayout = "layouts/home.php";
                 <div class="row" style="margin-top:15px;">
                     <div class="col-md-2">Name</div>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" name="searchName">
+                        <input type="text" class="form-control searchName" name="searchName"
+                               value="<?php echo isset($_GET['searchName']) ? $_GET['searchName'] : '' ?>">
                     </div>
                 </div>
                 <div class="row" style="margin-top:15px;">
                     <div class="col-md-2">Email</div>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" name="searchEmail">
+                        <input type="text" class="form-control searchEmail" name="searchEmail"
+                               value="<?php echo isset($_GET['searchEmail']) ? $_GET['searchEmail'] : '' ?>">
                     </div>
                 </div>
                 <div class="row" style="margin-top:15px;">
                     <div class="col-md-2"></div>
                     <div class="col-md-10">
                         <input type="submit" value="Search" class="btn btn-primary">
+                        <input type="submit" value="Reset" class="btn btn-danger" onclick="myFunction()">
+                        <script>
+                            function myFunction() {
+                                document.getElementsByClassName("searchName")[0].removeAttribute("value");
+                                document.getElementsByClassName("searchEmail")[0].removeAttribute("value");
+                            }</script>
                     </div>
                 </div>
             </div>
@@ -38,20 +46,20 @@ $this->fileLayout = "layouts/home.php";
     <div class="panel-body">
         <table class="table table-bordered table-hover thead-light" style="text-align: center;">
             <tr>
-                <th style="width: 50px;">Id
-                    <a href="index.php?controller=admin&action=index<?php echo isset($_GET['searchName']) ? "&searchName=" . $_GET['searchName'] : "" ?><?php echo isset($_GET['searchEmail']) ? "&searchEmail=" . $_GET['searchEmail'] : "" ?>&order=idAsc ">
-                        <i
-                                class="fa fa-sort" aria-hidden="true"></i></a></th>
+                <th style="width: 50px;">
+                    <a style="text-decoration: none; color:#34373a ;" href="index.php?controller=admin&action=index<?php echo $search ?>&column=id&order=<?php echo $asc_or_desc; ?>">
+                        ID <i
+                                class="fa fa-sort<?php echo $column == 'id' ? '-' . $sort_order : ''; ?>" aria-hidden="true"></i></a></th>
                 <th style="width: 100px;">Avatar</th>
-                <th style="width:150px;">Name <a
-                            href="index.php?controller=admin&action=index<?php echo isset($_GET['searchName']) ? "&searchName=" . $_GET['searchName'] : "" ?><?php echo isset($_GET['searchEmail']) ? "&searchEmail=" . $_GET['searchEmail'] : "" ?>&order=nameAsc"><i
-                                class="fa fa-sort" aria-hidden="true"></i></a></th>
-                <th style="width: 100px;">Email <a
-                            href="index.php?controller=admin&action=index<?php echo isset($_GET['searchName']) ? "&searchName=" . $_GET['searchName'] : "" ?><?php echo isset($_GET['searchEmail']) ? "&searchEmail=" . $_GET['searchEmail'] : "" ?>&order=emailAsc"><i
-                                class="fa fa-sort" aria-hidden="true"></i></a></th>
-                <th style="width: 80px;">Role <a
-                            href="index.php?controller=admin&action=index<?php echo isset($_GET['searchName']) ? "&searchName=" . $_GET['searchName'] : "" ?><?php echo isset($_GET['searchEmail']) ? "&searchEmail=" . $_GET['searchEmail'] : "" ?>&order=roleAsc"><i
-                                class="fa fa-sort" aria-hidden="true"></i></a></th>
+                <th  style="width:200px;"><a style="text-decoration: none; color:#34373a ;"
+                            href="index.php?controller=admin&action=index<?php echo $search;?>&column=name&order=<?php echo $asc_or_desc; ?>">Name <i
+                                class="fa fa-sort<?php echo $column == 'name' ? '-' . $sort_order : ''; ?>" aria-hidden="true"></i></a></th>
+                <th style="width: 200px;"> <a style="text-decoration: none; color:#34373a ;"
+                            href="index.php?controller=admin&action=index<?php echo $search;?>&column=email&order=<?php echo $asc_or_desc; ?>">Email <i
+                                class="fa fa-sort<?php echo $column == 'email' ? '-' . $sort_order : ''; ?>" aria-hidden="true"></i></a></th>
+                <th style="width: 100px;"> <a style="text-decoration: none; color:#34373a ;"
+                            href="index.php?controller=admin&action=index<?php echo $search;?>&column=role&order=<?php echo $asc_or_desc; ?>">Role <i
+                                class="fa fa-sort<?php echo $column == 'role' ? '-' . $sort_order : ''; ?>" aria-hidden="true"></i></a></th>
                 <th style="width:70px;">Action</th>
             </tr>
             <?php if (!empty($data)): ?>
@@ -59,13 +67,13 @@ $this->fileLayout = "layouts/home.php";
                     <tr>
                         <td><?php echo $rows->id ?></td>
                         <td style="text-align: center;">
-                            <?php if (file_exists("assets/upload/admin/" . $rows->id . "/" . $rows->avatar)): ?>
-                                <img src="assets/upload/admin/<?php echo $rows->id; ?>/<?php echo $rows->avatar; ?>"
-                                     style="width: 70px;">
+                            <?php if (file_exists(PATH_UPLOAD_ADMIN . $rows->id . "/" . $rows->avatar)): ?>
+                                <img src="<?php echo PATH_UPLOAD_ADMIN ?><?php echo $rows->id; ?>/<?php echo $rows->avatar; ?>"
+                                     style="width: 70px; height: 65px;">
                             <?php endif; ?>
                         </td>
                         <td><?php echo $rows->name ?></td>
-                        <td><?php echo $rows->email ?></td>
+                        <td ><?php echo $rows->email ?></td>
                         <td><?php echo $rows->role ?></td>
                         <td style="text-align:center;">
                             <a href="index.php?controller=admin&action=update&id=<?php echo $rows->id; ?>"><i
@@ -88,12 +96,6 @@ $this->fileLayout = "layouts/home.php";
                 margin: 0px;
             }
         </style>
-        <ul class="pagination">
-            <li class="page-item disabled"><a href="#" class="page-link">Trang</a></li>
-            <?php for ($i = 1; $i <= $numPage; $i++): ?>
-                <li class="page-item"><a href="index.php?<?php echo $_SERVER["QUERY_STRING"] ?>&page=<?php echo $i; ?>"
-                                         class="page-link"><?php echo $i; ?></a></li>
-            <?php endfor; ?>
-        </ul>
+        <?php require_once ('views/admin/element/_pagination.php')?>
     </div>
 </div>

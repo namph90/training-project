@@ -2,12 +2,14 @@
 
 require_once('controllers/base_controller.php');
 require_once('models/admin/AdminModel.php');
+require_once('config/config.php');
 
 class AdminController extends BaseController
 {
     use AdminModel;
 
-    function __construct()
+
+    public function __construct()
     {
         $this->authenticationAdmin();
         $this->checkRole();
@@ -15,10 +17,17 @@ class AdminController extends BaseController
 
     public function index()
     {
-        $recordPerPage = 10;
-        $data = $this->modelRead($recordPerPage);
-        $numPage = ceil($data[1] / $recordPerPage);
-        $this->render("admin/m_admin/index", ['data' => $data[0], "numPage" => $numPage]);
+        $dataAdmin = $this->modelRead(RECORDPERPAGE);
+        $numPage = ceil($dataAdmin['count'] / RECORDPERPAGE);
+        $arr = array(
+            'data' => $dataAdmin['data'],
+            "numPage" => $numPage,
+            "column" => $dataAdmin['column'],
+            "asc_or_desc" => $dataAdmin['asc_or_desc'],
+            "sort_order" => $dataAdmin['sort_order'],
+            "search" => $dataAdmin['search']
+        );
+        $this->render("admin/m_admin/index", $arr);
     }
 
     public function create()
@@ -34,21 +43,36 @@ class AdminController extends BaseController
 
     public function update()
     {
-        $id = isset($_GET['id']) ? $_GET['id'] : "";
-        $action = "index.php?controller=admin&action=updatePost&id=$id";
-        $data = $this->find($id);
-        $this->render("admin/m_admin/create", ['action' => $action, 'data' => $data]);
+        try {
+            $id = isset($_GET['id']) ? $_GET['id'] : "";
+            $action = "index.php?controller=admin&action=updatePost&id=$id";
+            $data = $this->find($id);
+            $this->render("admin/m_admin/create", ['action' => $action, 'data' => $data]);
+        } catch (Exception $e) {
+            $this->render("layouts/error");
+        }
     }
 
     public function updatePost()
     {
-        $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $this->updateModel($id);
+        try {
+            $id = isset($_GET['id']) ? $_GET['id'] : "";
+            $this->updateModel($id);
+        } catch (Exception $e) {
+            $this->render("layouts/error");
+        }
     }
 
     public function delete()
     {
-        $id = isset($_GET['id']) ? $_GET['id'] : "";
-        $this->deleteModel($id);
+        try {
+            $id = isset($_GET['id']) ? $_GET['id'] : "";
+            $this->deleteModel($id);
+        } catch (Exception $e) {
+            $this->render("layouts/error");
+        }
+    }
+    public function paginate() {
+        $this->render('admin/element/_pagination');
     }
 }

@@ -7,15 +7,22 @@ class mUserController extends BaseController
 {
     use UserModel;
 
-    function __construct()
+    public function __construct()
     {
         $this->authenticationAdmin();
     }
 
     public function index()
     {
-        $data = $this->modelRead();
-        $this->render("admin/m_user/index", ['data' => $data]);
+        $dataUser = $this->modelRead();
+        $arr = array(
+            'data' => $dataUser['data'],
+            "column" => $dataUser['column'],
+            "asc_or_desc" => $dataUser['asc_or_desc'],
+            "sort_order" => $dataUser['sort_order'],
+            "search" => $dataUser['search']
+        );
+        $this->render("admin/m_user/index", $arr);
     }
 
     public function create()
@@ -31,21 +38,36 @@ class mUserController extends BaseController
 
     public function update()
     {
-        $id = isset($_GET['id']) ? $_GET['id'] : "";
-        $action = "index.php?controller=mUser&action=updatePost&id=$id";
-        $data = $this->find($id);
-        $this->render("admin/m_user/create", ['action' => $action, 'data' => $data]);
+        try {
+            $id = isset($_GET['id']) ? $_GET['id'] : "";
+            $action = "index.php?controller=mUser&action=updatePost&id=$id";
+            $data = $this->find($id);
+            $this->render("admin/m_user/create", ['action' => $action, 'data' => $data]);
+        }
+        catch (Exception $e) {
+            $this->render("layouts/error");
+        }
     }
 
     public function updatePost()
     {
-        $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $this->updateModel($id);
+        try {
+            $id = isset($_GET['id']) ? $_GET['id'] : 0;
+            $this->updateModel($id);
+        }
+        catch (Exception $e) {
+            $this->render("layouts/error");
+        }
     }
 
     public function delete()
     {
-        $id = isset($_GET['id']) ? $_GET['id'] : "";
-        $this->deleteModel($id);
+        try {
+            $id = isset($_GET['id']) ? $_GET['id'] : "";
+            $this->deleteModel($id);
+        }
+        catch (Exception $e) {
+            $this->render("layouts/error");
+        }
     }
 }

@@ -10,8 +10,10 @@ trait User
         $password = md5($password);
         $conn = DB::getInstance();
         $_SESSION['email_create'] = $_POST['email'];
+
         $query = $conn->prepare("select email,id from users where email=:_email and password=:_password");
         $query->execute(array("_email" => $email, "_password" => $password));
+
         $countEmail = $conn->query("select * from users where email= '$email'");
         $countPass = $conn->query("select * from users where email= '$email' and password = '$password'");
         if ($query->rowCount() > 0) {
@@ -42,22 +44,22 @@ trait User
 
     public function loginFbModel()
     {
-        include 'config/fbconfig.php';
+        require_once ('config/fbconfig.php');
         $helper = $fb->getRedirectLoginHelper();
         try {
             $accessToken = $helper->getAccessToken();
             $response = $fb->get('/me?fields=id,name,email', $accessToken);
             $requestPicture = $fb->get('/me/picture?redirect=false&height=100', $accessToken);
-        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
             echo 'Graph returned an error: ' . $e->getMessage();
             exit;
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
             // When validation fails or other local issues
             echo 'Facebook SDK returned an error: ' . $e->getMessage();
             exit;
         }
-        if (!isset($accessToken)) {
+        if (! isset($accessToken)) {
             if ($helper->getError()) {
                 header('HTTP/1.0 401 Unauthorized');
                 echo "Error: " . $helper->getError() . "\n";
@@ -70,9 +72,12 @@ trait User
             }
             exit;
         }
+
         $me = $response->getGraphUser();
         $picture = $requestPicture->getGraphUser();
+        //var_dump($me);die;
         $this->loginFromSocialCallBack($me, $picture);
+
 
     }
 

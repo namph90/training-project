@@ -8,17 +8,17 @@ class UserController extends BaseController
 {
     use User;
 
-    function __construct()
+    public function __construct()
     {
 
     }
 
     public function login()
     {
-        include 'config/fbconfig.php';
+        require_once ('config/fbconfig.php');
         $helper = $fb->getRedirectLoginHelper();
-        //$permissions = ['email'];
-        $loginUrl = $helper->getLoginUrl('https://phn.com/TT/MVC_Thuan/index.php?controller=user&action=loginFb');
+        $permissions = ['email'];
+        $loginUrl = $helper->getLoginUrl('https://phn.com/TT/MVC_Thuan/index.php?controller=user&action=loginFb', $permissions);
         $this->render("user/login",['loginUrl'=>$loginUrl]);
     }
     public function loginPost()

@@ -1,7 +1,11 @@
 <?php
+require_once('config/config.php');
+require_once('models/upload/UploadImages.php');
 
 trait UserModel
 {
+    use UploadImages;
+
     public function createModel()
     {
         $email = $_POST['email'];
@@ -9,15 +13,15 @@ trait UserModel
         $data = $conn->query("select * from users where email = '$email'");
 
         //validate email
-        Validated::email($data->rowCount(), $_POST['email']);
+        UserValidated::email($data->rowCount(), $_POST['email']);
         //validated name
-        Validated::name($_POST['name']);
+        UserValidated::name($_POST['name']);
         //validated password
-        Validated::password($_POST['password']);
+        UserValidated::password($_POST['password']);
         // validated Password Verify
-        Validated::password_confirm($_POST['password'], $_POST['password_confirm']);
+        UserValidated::password_confirm($_POST['password'], $_POST['password_confirm']);
         //validated image
-        Validated::image($_FILES["avatar"]);
+        UserValidated::image($_FILES["avatar"]);
         $_SESSION['dl'] = $_POST;
         if (!isset($_SESSION['errCreate'])) {
             $name = $_POST['name'];
@@ -32,13 +36,10 @@ trait UserModel
             $query = $conn->prepare("insert into users set name=:_name,email=:_email,password=:_password, status=:_status, avatar=:_avatar");
             $query->execute(["_name" => $name, "_email" => $email, "_password" => $password, "_status" => $status, "_avatar" => $avatar]);
             $id = $conn->lastInsertId();
-            if ($_FILES["avatar"]["name"] != "") {
-                if (!file_exists("assets/upload/user/$id")) {
-                    mkdir("assets/upload/user/$id", 0755, true);
-                }
-                move_uploaded_file($_FILES["avatar"]["tmp_name"], "assets/upload/user/$id/$avatar");
-            }
-            $_SESSION['success'] = "Create successfull!";
+            $path = PATH_UPLOAD_USER . $id;
+            $newPath = $path . '/' . $avatar;
+            $this->createImage($_FILES["avatar"], $path, $newPath);
+            $_SESSION['success'] = "Create successful!";
             unset($_SESSION['dl']);
             header("location:index.php?controller=mUser&action=index");
         } else {
@@ -49,39 +50,31 @@ trait UserModel
     public function modelRead()
     {
         $sqlOrder = " ";
-        $sqlSearch = " ";
-        if (!empty($_GET["searchName"]) && empty($_GET["searchEmail"])) {
-            $searchName = $_GET["searchName"];
-            $sqlSearch = "and name like '%$searchName%'";
-        }
-        if (!empty($_GET["searchEmail"]) && empty($_GET["searchName"])) {
-            $searchEmail = $_GET['searchEmail'];
-            $sqlSearch = "and email like '%$searchEmail%'";
-        }
-        if (!empty($_GET["searchEmail"]) && !empty($_GET['searchName'])) {
-            $searchEmail = $_GET['searchEmail'];
-            $searchName = $_GET['searchName'];
-            $sqlSearch = "and email like '%$searchEmail%' and name like '%$searchName%'";
-        }
-        $order = isset($_GET["order"]) ? $_GET["order"] : "";
-        switch ($order) {
-            case "nameAsc":
-                $sqlOrder = " order by name asc ";
-                break;
-            case "emailAsc":
-                $sqlOrder = " order by email asc ";
-                break;
-            case "statusAsc":
-                $sqlOrder = " order by status asc ";
-                break;
-            case "idAsc":
-                $sqlOrder = " order by id asc ";
-                break;
-        }
+        $searchName = isset($_GET["searchName"]) ? $_GET["searchName"] : "";
+        $searchEmail = isset($_GET["searchEmail"]) ? $_GET["searchEmail"] : "";
+        $sqlSearch = !empty($_GET["searchName"]) ? (!empty($_GET["searchEmail"]) ?
+            "and email like '%$searchEmail%' and name like '%$searchName%'" : "and name like '%$searchName%'") :
+            (!empty($_GET["searchEmail"]) ? "and email like '%$searchEmail%'" : " ");
+        $name = isset($_GET['searchName']) ? "&searchName=" . $_GET['searchName'] : "";
+        $email = isset($_GET['searchEmail']) ? "&searchEmail=" . $_GET['searchEmail'] : "";
+        $search = $name . $email;
+
+        $columns = array('id', 'name', 'email', 'status');
+        $column = isset($_GET['column']) && in_array($_GET['column'], $columns, true) ? $_GET['column'] : $columns[0];
+        $sort_order = isset($_GET['order']) && $_GET['order'] == 'desc' ? 'desc' : 'asc';
+        $asc_or_desc = $sort_order == 'asc' ? 'desc' : 'asc';
+        $sqlOrder = "order by $column $sort_order";
+
         $conn = DB::getInstance();
         $query = $conn->query("select * from users where del_flag = 0 $sqlSearch $sqlOrder");
         $data = $query->fetchAll();
-        return $data;
+        return array(
+            'data' => $data,
+            'column'=>$column,
+            'asc_or_desc' => $asc_or_desc,
+            'sort_order' => $sort_order,
+            'search' => $search
+        );
     }
 
     public function find($id)
@@ -104,20 +97,22 @@ trait UserModel
         $query->execute([":_name" => $name, ":_status" => $status, ":_id" => $id]);
         if ($_FILES["avatar"]["name"] != "") {
             $oldQuery = $conn->query("select avatar from users where id=$id");
-            if ($oldQuery->rowCount() > 0)
-                $oldPhoto = $oldQuery->fetch();
-            if (file_exists("assets/upload/user/" . $id . "/" . $oldPhoto->avatar))
-                unlink("assets/upload/user/" . $id . "/" . $oldPhoto->avatar);
-            $avatar = time() . "_" . $_FILES["avatar"]["name"];
-            move_uploaded_file($_FILES["avatar"]["tmp_name"], "assets/upload/user/$id/$avatar");
-            $query = $conn->prepare("update users set avatar = :_avatar where id=:_id");
-            $query->execute([":_avatar" => $avatar, ":_id" => $id]);
+            if ($oldQuery->rowCount() > 0) {
+                $oldPhoto = $oldQuery->fetch()->avatar;
+                $avatar = time() . "_" . $_FILES["avatar"]["name"];
+                $path = PATH_UPLOAD_USER . $id;
+                $pathOldAvatar = $path . '/' . $oldPhoto;
+                $pathNewAvatar = $path . '/' . $avatar;
+                $this->updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
+                $query = $conn->prepare("update users set avatar = :_avatar where id=:_id");
+                $query->execute([":_avatar" => $avatar, ":_id" => $id]);
+            }
         }
         if ($password != "") {
             $query = $conn->prepare("update users set password=:_password where id=:_id");
             $query->execute([":_password" => $password, ":_id" => $id]);
         }
-        $_SESSION['success'] = "Update Successfull!";
+        $_SESSION['success'] = "Update Successful!";
         header("location:index.php?controller=mUser&action=index");
     }
 
@@ -126,17 +121,11 @@ trait UserModel
         $conn = DB::getInstance();
         $query = $conn->prepare("select * from users where id =:_id");
         $query->execute([":_id" => $id]);
-        $target = "assets/upload/user/$id";
+        $path = PATH_UPLOAD_USER . $id;
         if ($query->rowCount() > 0) {
-            $oldPhoto = $query->fetch();
-            if (is_dir("assets/upload/user/$id")) {
-                if (file_exists("assets/upload/user/" . $id . "/" . $oldPhoto->avatar)) {
-                    unlink("assets/upload/user/" . $id . "/" . $oldPhoto->avatar);
-                }
-                rmdir($target);
-            }
+            $this->deleteImage($path);
             $conn->query("update users set del_flag = 1 where id=$id");
-            $_SESSION['success'] = "Delete Successfull!";
+            $_SESSION['success'] = "Delete Successful!";
         }
         header("location:index.php?controller=mUser&action=index");
     }
