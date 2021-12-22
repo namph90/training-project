@@ -17,19 +17,28 @@ $this->fileLayout = "layouts/home.php";
                 <div class="row" style="margin-top:15px;">
                     <div class="col-md-2">Name</div>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" name="searchName">
+                        <input type="text" class="form-control searchName" name="searchName"
+                               value="<?php echo isset($_GET['searchName']) ? $_GET['searchName'] : '' ?>">
                     </div>
                 </div>
                 <div class="row" style="margin-top:15px;">
                     <div class="col-md-2">Email</div>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" name="searchEmail">
+                        <input type="text" class="form-control searchEmail" name="searchEmail"
+                               value="<?php echo isset($_GET['searchEmail']) ? $_GET['searchEmail'] : '' ?>">
                     </div>
                 </div>
                 <div class="row" style="margin-top:15px;">
                     <div class="col-md-2"></div>
                     <div class="col-md-10">
                         <input type="submit" value="Search" class="btn btn-primary">
+                        <input type="button" value="Reset" class="btn btn-danger" onclick="Reset()">
+                        <script>
+                            function Reset() {
+                                document.getElementsByClassName("searchName")[0].removeAttribute("value");
+                                document.getElementsByClassName("searchEmail")[0].removeAttribute("value");
+                            }
+                        </script>
                     </div>
                 </div>
             </div>
@@ -50,7 +59,7 @@ $this->fileLayout = "layouts/home.php";
                 <th style="width: 100px;">Avatar</th>
                 <th style="width:150px;">
                     <a style="text-decoration: none; color:#34373a ;"
-                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=id&order=<?php echo $asc_or_desc; ?>">
+                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=name&order=<?php echo $asc_or_desc; ?>">
                         Name
                         <i class="fa fa-sort<?php echo $column == 'name' ? '-' . $sort_order : ''; ?>"
                            aria-hidden="true"></i>
@@ -58,7 +67,7 @@ $this->fileLayout = "layouts/home.php";
                 </th>
                 <th style="width: 100px;">
                     <a style="text-decoration: none; color:#34373a ;"
-                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=id&order=<?php echo $asc_or_desc; ?>">
+                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=email&order=<?php echo $asc_or_desc; ?>">
                         Email
                         <i class="fa fa-sort<?php echo $column == 'email' ? '-' . $sort_order : ''; ?>"
                            aria-hidden="true"></i>
@@ -66,7 +75,7 @@ $this->fileLayout = "layouts/home.php";
                 </th>
                 <th style="width: 80px;">
                     <a style="text-decoration: none; color:#34373a ;"
-                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=id&order=<?php echo $asc_or_desc; ?>">
+                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=status&order=<?php echo $asc_or_desc; ?>">
                         Status
                         <i class="fa fa-sort<?php echo $column == 'status' ? '-' . $sort_order : ''; ?>"
                            aria-hidden="true"></i>
@@ -84,11 +93,11 @@ $this->fileLayout = "layouts/home.php";
                                      style="width: 70px;">
                             <?php endif; ?>
                         </td>
-                        <td><?php echo $rows->name ?></td>
+                        <td class="highlight"><?php echo $rows->name ?></td>
                         <td><?php echo $rows->email ?></td>
                         <td><?php echo $rows->status ?></td>
                         <td style="text-align:center;">
-                            <a href="index.php?controller=mUser&action=update&id=<?php echo $rows->id; ?>"><i
+                            <a href="index.php?controller=mUser&action=edit&id=<?php echo $rows->id; ?>"><i
                                         class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;
                             <a href="index.php?controller=mUser&action=delete&id=<?php echo $rows->id; ?>"
                                onclick="return window.confirm('Are you sure?');"><i class="fa fa-trash-o"

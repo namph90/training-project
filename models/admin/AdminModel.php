@@ -37,20 +37,15 @@ trait AdminModel
 
     }
 
-    public function createModel()
+    public function store()
     {
         $email = $_POST['email'];
         $conn = DB::getInstance();
         $data = $conn->query("select * from admin where email = '$email'");
-        //validate email
         AdminValidated::email($data->rowCount(), $_POST['email']);
-        //validated name
         AdminValidated::name($_POST['name']);
-        //validated password
         AdminValidated::password($_POST['password']);
-        // validated Password Verify
         AdminValidated::password_confirm($_POST['password'], $_POST['password_confirm']);
-        //validated image
         AdminValidated::image($_FILES["avatar"]);
 //        $imageData = file_get_contents($_FILES['avatar']['tmp_name']);
 //        $test = base64_encode($imageData);
@@ -81,7 +76,7 @@ trait AdminModel
         }
     }
 
-    public function modelRead($recordPerPage)
+    public function show($recordPerPage)
     {
         $page = isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0 ? $_GET["page"] - 1 : 0;
         $from = $page * $recordPerPage;
@@ -108,7 +103,7 @@ trait AdminModel
         return array(
             'data' => $data,
             'count' => $count,
-            'column'=>$column,
+            'column' => $column,
             'asc_or_desc' => $asc_or_desc,
             'sort_order' => $sort_order,
             'search' => $search
@@ -123,41 +118,57 @@ trait AdminModel
         return $data;
     }
 
-    public function updateModel($id)
+    public function update($id)
     {
         $name = $_POST['name'];
         $password = $_POST['password'];
+        $password_confirm = $_POST['password_confirm'];
         $role = $_POST['role'];
         $avatar = "";
-        $password = md5($password);
+        $_SESSION['dl'] = $_POST;
 
-        $conn = DB::getInstance();
-        $query = $conn->prepare("update admin set name=:_name, role=:_role where id=:_id");
-        $query->execute([":_name" => $name, ":_role" => $role, ":_id" => $id]);
+        AdminValidated::name($name);
+        if (!empty($password)) {
+            AdminValidated::password($password);
+            AdminValidated::password_confirm($password, $password_confirm);
+        }
+        if (!empty($_FILES["avatar"]["name"])) {
+            AdminValidated::image($_FILES["avatar"]);
+        }
+        if (!isset($_SESSION['errCreate'])) {
+            $password = md5($password);
+            $conn = DB::getInstance();
+            $query = $conn->prepare("update admin set name=:_name, role=:_role where id=:_id");
+            $query->execute([":_name" => $name, ":_role" => $role, ":_id" => $id]);
 
-        if ($_FILES["avatar"]["name"] != "") {
-            $oldQuery = $conn->query("select avatar from admin where id=$id");
-            if ($oldQuery->rowCount() > 0) {
-                $oldPhoto = $oldQuery->fetch()->avatar;
-                $avatar = time() . "_" . $_FILES["avatar"]["name"];
-                $path = PATH_UPLOAD_ADMIN . $id;
-                $pathOldAvatar = $path . '/' . $oldPhoto;
-                $pathNewAvatar = $path . '/' . $avatar;
-                $this->updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
-                $query = $conn->prepare("update admin set avatar = :_avatar where id=:_id");
-                $query->execute([":_avatar" => $avatar, ":_id" => $id]);
+            if ($_FILES["avatar"]["name"] != "") {
+                $oldQuery = $conn->query("select avatar from admin where id=$id");
+                if ($oldQuery->rowCount() > 0) {
+                    $oldPhoto = $oldQuery->fetch()->avatar;
+                    $avatar = time() . "_" . $_FILES["avatar"]["name"];
+                    $path = PATH_UPLOAD_ADMIN . $id;
+                    $pathOldAvatar = $path . '/' . $oldPhoto;
+                    $pathNewAvatar = $path . '/' . $avatar;
+                    $this->updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
+                    $query = $conn->prepare("update admin set avatar = :_avatar where id=:_id");
+                    $query->execute([":_avatar" => $avatar, ":_id" => $id]);
+                }
             }
-        }
-        if ($password != "") {
-            $query = $conn->prepare("update admin set password=:_password where id=:_id");
-            $query->execute([":_password" => $password, ":_id" => $id]);
-        }
+            if ($password != "") {
+                $query = $conn->prepare("update admin set password=:_password where id=:_id");
+                $query->execute([":_password" => $password, ":_id" => $id]);
+            }
 
-        $_SESSION['success'] = "Update Successful!";
-        header("location:index.php?controller=admin&action=index");
+            $_SESSION['success'] = "Update Successful!";
+            header("location:index.php?controller=admin&action=index");
+            //unset($_SESSION['errCreate']);
+            unset($_SESSION['dl']);
+        } else {
+            header("location:index.php?controller=admin&action=edit&id=$id");
+        }
     }
 
-    public function deleteModel($id)
+    public function destroy($id)
     {
         $conn = DB::getInstance();
         $query = $conn->prepare("select * from admin where id =:_id");

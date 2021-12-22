@@ -8,7 +8,6 @@ class AdminController extends BaseController
 {
     use AdminModel;
 
-
     public function __construct()
     {
         $this->authenticationAdmin();
@@ -17,7 +16,7 @@ class AdminController extends BaseController
 
     public function index()
     {
-        $dataAdmin = $this->modelRead(RECORDPERPAGE);
+        $dataAdmin = $this->show(RECORDPERPAGE);
         $numPage = ceil($dataAdmin['count'] / RECORDPERPAGE);
         $arr = array(
             'data' => $dataAdmin['data'],
@@ -38,41 +37,30 @@ class AdminController extends BaseController
 
     public function createPost()
     {
-        $this->createModel();
+        $this->store();
     }
 
-    public function update()
+    public function edit()
     {
-        try {
             $id = isset($_GET['id']) ? $_GET['id'] : "";
             $action = "index.php?controller=admin&action=updatePost&id=$id";
             $data = $this->find($id);
             $this->render("admin/m_admin/create", ['action' => $action, 'data' => $data]);
-        } catch (Exception $e) {
-            $this->render("layouts/error");
-        }
     }
 
     public function updatePost()
     {
-        try {
             $id = isset($_GET['id']) ? $_GET['id'] : "";
-            $this->updateModel($id);
-        } catch (Exception $e) {
-            $this->render("layouts/error");
-        }
+            $this->update($id);
     }
 
     public function delete()
     {
         try {
             $id = isset($_GET['id']) ? $_GET['id'] : "";
-            $this->deleteModel($id);
+            $this->destroy($id);
         } catch (Exception $e) {
             $this->render("layouts/error");
         }
-    }
-    public function paginate() {
-        $this->render('admin/element/_pagination');
     }
 }

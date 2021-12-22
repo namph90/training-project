@@ -31,12 +31,13 @@ $this->fileLayout = "layouts/home.php";
                     <div class="col-md-2"></div>
                     <div class="col-md-10">
                         <input type="submit" value="Search" class="btn btn-primary">
-                        <input type="submit" value="Reset" class="btn btn-danger" onclick="myFunction()">
+                        <input type="button" value="Reset" class="btn btn-danger" onclick="Reset()">
                         <script>
-                            function myFunction() {
+                            function Reset() {
                                 document.getElementsByClassName("searchName")[0].removeAttribute("value");
                                 document.getElementsByClassName("searchEmail")[0].removeAttribute("value");
-                            }</script>
+                            }
+                        </script>
                     </div>
                 </div>
             </div>
@@ -47,19 +48,27 @@ $this->fileLayout = "layouts/home.php";
         <table class="table table-bordered table-hover thead-light" style="text-align: center;">
             <tr>
                 <th style="width: 50px;">
-                    <a style="text-decoration: none; color:#34373a ;" href="index.php?controller=admin&action=index<?php echo $search ?>&column=id&order=<?php echo $asc_or_desc; ?>">
+                    <a style="text-decoration: none; color:#34373a ;"
+                       href="index.php?controller=admin&action=index<?php echo $search ?>&column=id&order=<?php echo $asc_or_desc; ?>">
                         ID <i
-                                class="fa fa-sort<?php echo $column == 'id' ? '-' . $sort_order : ''; ?>" aria-hidden="true"></i></a></th>
+                                class="fa fa-sort<?php echo $column == 'id' ? '-' . $sort_order : ''; ?>"
+                                aria-hidden="true"></i></a></th>
                 <th style="width: 100px;">Avatar</th>
-                <th  style="width:200px;"><a style="text-decoration: none; color:#34373a ;"
-                            href="index.php?controller=admin&action=index<?php echo $search;?>&column=name&order=<?php echo $asc_or_desc; ?>">Name <i
-                                class="fa fa-sort<?php echo $column == 'name' ? '-' . $sort_order : ''; ?>" aria-hidden="true"></i></a></th>
-                <th style="width: 200px;"> <a style="text-decoration: none; color:#34373a ;"
-                            href="index.php?controller=admin&action=index<?php echo $search;?>&column=email&order=<?php echo $asc_or_desc; ?>">Email <i
-                                class="fa fa-sort<?php echo $column == 'email' ? '-' . $sort_order : ''; ?>" aria-hidden="true"></i></a></th>
-                <th style="width: 100px;"> <a style="text-decoration: none; color:#34373a ;"
-                            href="index.php?controller=admin&action=index<?php echo $search;?>&column=role&order=<?php echo $asc_or_desc; ?>">Role <i
-                                class="fa fa-sort<?php echo $column == 'role' ? '-' . $sort_order : ''; ?>" aria-hidden="true"></i></a></th>
+                <th style="width:200px;"><a style="text-decoration: none; color:#34373a ;"
+                                            href="index.php?controller=admin&action=index<?php echo $search; ?>&column=name&order=<?php echo $asc_or_desc; ?>">Name
+                        <i
+                                class="fa fa-sort<?php echo $column == 'name' ? '-' . $sort_order : ''; ?>"
+                                aria-hidden="true"></i></a></th>
+                <th style="width: 200px;"><a style="text-decoration: none; color:#34373a ;"
+                                             href="index.php?controller=admin&action=index<?php echo $search; ?>&column=email&order=<?php echo $asc_or_desc; ?>">Email
+                        <i
+                                class="fa fa-sort<?php echo $column == 'email' ? '-' . $sort_order : ''; ?>"
+                                aria-hidden="true"></i></a></th>
+                <th style="width: 100px;"><a style="text-decoration: none; color:#34373a ;"
+                                             href="index.php?controller=admin&action=index<?php echo $search; ?>&column=role&order=<?php echo $asc_or_desc; ?>">Role
+                        <i
+                                class="fa fa-sort<?php echo $column == 'role' ? '-' . $sort_order : ''; ?>"
+                                aria-hidden="true"></i></a></th>
                 <th style="width:70px;">Action</th>
             </tr>
             <?php if (!empty($data)): ?>
@@ -73,10 +82,10 @@ $this->fileLayout = "layouts/home.php";
                             <?php endif; ?>
                         </td>
                         <td><?php echo $rows->name ?></td>
-                        <td ><?php echo $rows->email ?></td>
+                        <td><?php echo $rows->email ?></td>
                         <td><?php echo $rows->role ?></td>
                         <td style="text-align:center;">
-                            <a href="index.php?controller=admin&action=update&id=<?php echo $rows->id; ?>"><i
+                            <a href="index.php?controller=admin&action=edit&id=<?php echo $rows->id; ?>"><i
                                         class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;
                             <a href="index.php?controller=admin&action=delete&id=<?php echo $rows->id; ?>"
                                onclick="return window.confirm('Are you sure?');"><i class="fa fa-trash-o"
@@ -96,6 +105,6 @@ $this->fileLayout = "layouts/home.php";
                 margin: 0px;
             }
         </style>
-        <?php require_once ('views/admin/element/_pagination.php')?>
+        <?php require_once('views/admin/element/_pagination.php') ?>
     </div>
 </div>

@@ -14,7 +14,7 @@ class mUserController extends BaseController
 
     public function index()
     {
-        $dataUser = $this->modelRead();
+        $dataUser = $this->show();
         $arr = array(
             'data' => $dataUser['data'],
             "column" => $dataUser['column'],
@@ -33,10 +33,10 @@ class mUserController extends BaseController
 
     public function createPost()
     {
-        $this->createModel();
+        $this->store();
     }
 
-    public function update()
+    public function edit()
     {
         try {
             $id = isset($_GET['id']) ? $_GET['id'] : "";
@@ -53,7 +53,7 @@ class mUserController extends BaseController
     {
         try {
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
-            $this->updateModel($id);
+            $this->update($id);
         }
         catch (Exception $e) {
             $this->render("layouts/error");
@@ -64,7 +64,7 @@ class mUserController extends BaseController
     {
         try {
             $id = isset($_GET['id']) ? $_GET['id'] : "";
-            $this->deleteModel($id);
+            $this->destroy($id);
         }
         catch (Exception $e) {
             $this->render("layouts/error");

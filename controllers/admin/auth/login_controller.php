@@ -9,6 +9,9 @@ class LoginController extends BaseController
 
     public function login()
     {
+        if (isset($_SESSION['admin'])) {
+            header("location:index.php?controller=home&action=index");
+        }
         $this->render("admin/login");
     }
 

@@ -6,17 +6,6 @@ abstract class BaseValidated
 
     abstract public static function password($pass);
 
-    public static function password_confirm($pass, $password_confirm)
-    {
-        if (!isset($_SESSION['errCreate']['password'])) {
-            if (empty(trim($password_confirm))) {
-                $_SESSION['errCreate']['confirmation_pwd']['required'] = 'Password Verify can not be blank';
-            } elseif (strlen(trim($password_confirm)) != strlen($pass)) {
-                $_SESSION['errCreate']['confirmation_pwd']['invaild'] = 'Password verify does not match';
-            }
-        }
-    }
-
     public static function email($count, $email)
     {
         if (empty(trim($email))) {
@@ -27,6 +16,15 @@ abstract class BaseValidated
             $_SESSION['errCreate']['email']['invaild'] = 'Email exist';
         }
     }
-
+    public static function password_confirm($pass, $password_confirm)
+    {
+        if (!isset($_SESSION['errCreate']['password'])) {
+            if (empty(trim($password_confirm))) {
+                $_SESSION['errCreate']['confirmation_pwd']['required'] = 'Password Verify can not be blank';
+            } elseif (strlen(trim($password_confirm)) != strlen($pass)) {
+                $_SESSION['errCreate']['confirmation_pwd']['invaild'] = 'Password verify does not match';
+            }
+        }
+    }
     abstract public static function image($file);
 }

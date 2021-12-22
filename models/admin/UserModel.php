@@ -6,7 +6,7 @@ trait UserModel
 {
     use UploadImages;
 
-    public function createModel()
+    public function store()
     {
         $email = $_POST['email'];
         $conn = DB::getInstance();
@@ -47,7 +47,7 @@ trait UserModel
         }
     }
 
-    public function modelRead()
+    public function show()
     {
         $sqlOrder = " ";
         $searchName = isset($_GET["searchName"]) ? $_GET["searchName"] : "";
@@ -85,38 +85,59 @@ trait UserModel
         return $data;
     }
 
-    public function updateModel($id)
+    public function update($id)
     {
         $name = $_POST['name'];
         $password = $_POST['password'];
+        $password_confirm = $_POST['password_confirm'];
         $status = $_POST['status'];
         $avatar = "";
-        $password = md5($password);
-        $conn = DB::getInstance();
-        $query = $conn->prepare("update users set name=:_name, status=:_status where id=:_id");
-        $query->execute([":_name" => $name, ":_status" => $status, ":_id" => $id]);
-        if ($_FILES["avatar"]["name"] != "") {
-            $oldQuery = $conn->query("select avatar from users where id=$id");
-            if ($oldQuery->rowCount() > 0) {
-                $oldPhoto = $oldQuery->fetch()->avatar;
-                $avatar = time() . "_" . $_FILES["avatar"]["name"];
-                $path = PATH_UPLOAD_USER . $id;
-                $pathOldAvatar = $path . '/' . $oldPhoto;
-                $pathNewAvatar = $path . '/' . $avatar;
-                $this->updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
-                $query = $conn->prepare("update users set avatar = :_avatar where id=:_id");
-                $query->execute([":_avatar" => $avatar, ":_id" => $id]);
+
+        $_SESSION['dl'] = $_POST;
+
+        UserValidated::name($name);
+        if (!empty($password)) {
+            UserValidated::password($password);
+            UserValidated::password_confirm($password, $password_confirm);
+        }
+        if (!empty($_FILES["avatar"]["name"])) {
+            UserValidated::image($_FILES["avatar"]);
+        }
+
+        if (!isset($_SESSION['errCreate'])) {
+            $password = md5($password);
+            $conn = DB::getInstance();
+            $query = $conn->prepare("update users set name=:_name, status=:_status where id=:_id");
+            $query->execute([":_name" => $name, ":_status" => $status, ":_id" => $id]);
+
+            if ($_FILES["avatar"]["name"] != "") {
+                $oldQuery = $conn->query("select avatar from users where id=$id");
+                if ($oldQuery->rowCount() > 0) {
+                    $oldPhoto = $oldQuery->fetch()->avatar;
+                    $avatar = time() . "_" . $_FILES["avatar"]["name"];
+                    $path = PATH_UPLOAD_USER . $id;
+                    $pathOldAvatar = $path . '/' . $oldPhoto;
+                    $pathNewAvatar = $path . '/' . $avatar;
+                    $this->updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
+                    $query = $conn->prepare("update users set avatar = :_avatar where id=:_id");
+                    $query->execute([":_avatar" => $avatar, ":_id" => $id]);
+                }
             }
+            if (!empty($password)) {
+                $query = $conn->prepare("update users set password=:_password where id=:_id");
+                $query->execute([":_password" => $password, ":_id" => $id]);
+            }
+
+            $_SESSION['success'] = "Update Successful!";
+            header("location:index.php?controller=mUser&action=index");
+            //unset($_SESSION['errCreate']);
+            unset($_SESSION['dl']);
+        } else {
+            header("location:index.php?controller=mUser&action=edit&id=$id");
         }
-        if ($password != "") {
-            $query = $conn->prepare("update users set password=:_password where id=:_id");
-            $query->execute([":_password" => $password, ":_id" => $id]);
-        }
-        $_SESSION['success'] = "Update Successful!";
-        header("location:index.php?controller=mUser&action=index");
     }
 
-    public function deleteModel($id)
+    public function destroy($id)
     {
         $conn = DB::getInstance();
         $query = $conn->prepare("select * from users where id =:_id");
