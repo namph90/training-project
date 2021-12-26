@@ -1,29 +1,29 @@
 <?php
 
-trait UploadImages
+class UploadImages
 {
-    public function  createFolder($path) {
+    public static function  createFolder($path) {
         if (!file_exists($path)) {
             mkdir($path, 0755, true);
         }
     }
-    public function createImage($file, $path, $newPath)
+    public static function createImage($file, $path, $newPath)
     {
         if ($file["name"] != "") {
-            $this->createFolder($path);
+            self::createFolder($path);
             move_uploaded_file($file["tmp_name"], $newPath);
         }
     }
 
-    public function updateImage($file, $path, $pathOldAvatar, $pathNewAvatar)
+    public static function updateImage($file, $path, $pathOldAvatar, $pathNewAvatar)
     {
-        $this->createFolder($path);
+        self::createFolder($path);
         if (file_exists($pathOldAvatar)) {
             unlink($pathOldAvatar);
         }
         move_uploaded_file($file["tmp_name"], $pathNewAvatar);
     }
-    function deleteImage($path) {
+    public static function deleteImage($path) {
         $files = glob($path . '/*');
         foreach ($files as $file) {
             is_dir($file) ? deleteImage($file) : unlink($file);

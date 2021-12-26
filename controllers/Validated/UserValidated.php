@@ -1,7 +1,8 @@
 <?php
-require_once ('models/validated/base_validated.php');
 
-class AdminValidated extends BaseValidated
+require_once('controllers/validated/base_validated.php');
+
+class UserValidated extends BaseValidated
 {
 
     public static function name($name)

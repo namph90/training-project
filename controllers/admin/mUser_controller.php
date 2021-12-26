@@ -5,22 +5,29 @@ require_once('models/admin/UserModel.php');
 
 class mUserController extends BaseController
 {
-    use UserModel;
+    public $model;
 
     public function __construct()
     {
+        $this->model = new UserModel();
         $this->authenticationAdmin();
     }
 
     public function index()
     {
-        $dataUser = $this->show();
+        $sqlOrder = " ";
+        $result = Paginate::search();
+
+        $columns = array('id', 'name', 'email', 'status');
+        $order = Paginate::order($columns);
+
+        $data = $this->model->show($result['sqlSearch'], $order['sqlOrder']);
         $arr = array(
-            'data' => $dataUser['data'],
-            "column" => $dataUser['column'],
-            "asc_or_desc" => $dataUser['asc_or_desc'],
-            "sort_order" => $dataUser['sort_order'],
-            "search" => $dataUser['search']
+            'data' => $data,
+            'column'=>$order['column'],
+            'asc_or_desc' => $order['asc_or_desc'],
+            'sort_order' => $order['sort_order'],
+            'search' => $result['search']
         );
         $this->render("admin/m_user/index", $arr);
     }
@@ -33,7 +40,7 @@ class mUserController extends BaseController
 
     public function createPost()
     {
-        $this->store();
+        $this->model->store();
     }
 
     public function edit()
@@ -41,7 +48,7 @@ class mUserController extends BaseController
         try {
             $id = isset($_GET['id']) ? $_GET['id'] : "";
             $action = "index.php?controller=mUser&action=updatePost&id=$id";
-            $data = $this->find($id);
+            $data = $this->model->find($id);
             $this->render("admin/m_user/create", ['action' => $action, 'data' => $data]);
         }
         catch (Exception $e) {
@@ -53,7 +60,7 @@ class mUserController extends BaseController
     {
         try {
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
-            $this->update($id);
+            $this->model->update($id);
         }
         catch (Exception $e) {
             $this->render("layouts/error");
@@ -64,7 +71,7 @@ class mUserController extends BaseController
     {
         try {
             $id = isset($_GET['id']) ? $_GET['id'] : "";
-            $this->destroy($id);
+            $this->model->destroy($id);
         }
         catch (Exception $e) {
             $this->render("layouts/error");

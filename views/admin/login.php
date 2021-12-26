@@ -10,33 +10,33 @@
 </head>
 <body>
     <div class="container" style="width: 500px; margin-top: 200px;">
-        <form method="post" action="index.php?controller=login&action=loginPost">
+        <form method="post" action="index.php?controller=login&action=login">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h2 class="text-center">Login Form</h2>
+                    <h2 class="text-center">LOGIN</h2>
                 </div>
                 <div class="panel-body">
                     <p class="form-group">
                         <label for="email">Email:</label>
                         <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email" value="<?php echo isset($_SESSION['email_create'])? $_SESSION['email_create']:'' ?>">
-                        <?php if (isset($_SESSION['errorsEmail'])) : ?>
+                        <?php if (isset($_SESSION['err_email'])) : ?>
                                 <p style="color: #ff0000;">
-                                    <?php echo $_SESSION['errorsEmail']?>
+                                    <?php echo $_SESSION['err_email']?>
                                 </p>
                         <?php endif ?>
-                        <?php unset($_SESSION['errorsEmail']) ?>
+                        <?php unset($_SESSION['err_email']) ?>
                         <?php unset($_SESSION['email_create']) ?>
 
                     </div>
                     <div class="form-group">
                         <label for="pwd">Password:</label>
                         <input type="password" class="form-control" id="pwd" name="password" placeholder="Enter Password">
-                        <?php if (isset($_SESSION['errorsPass'])) : ?>
+                        <?php if (isset($_SESSION['err_pass'])) : ?>
                             <p style="color: #ff0000;">
-                                <?php echo $_SESSION['errorsPass']?>
+                                <?php echo $_SESSION['err_pass']?>
                             </p>
                         <?php endif ?>
-                        <?php unset($_SESSION['errorsPass']) ?>
+                        <?php unset($_SESSION['err_pass']) ?>
                     </div>
                     <button class="btn btn-success" type="submit" name="submit">Login</button>
                 </div>

@@ -75,7 +75,6 @@ trait User
 
         $me = $response->getGraphUser();
         $picture = $requestPicture->getGraphUser();
-        //var_dump($me);die;
         $this->loginFromSocialCallBack($me, $picture);
 
 

@@ -6,13 +6,13 @@ abstract class BaseValidated
 
     abstract public static function password($pass);
 
-    public static function email($count, $email)
+    public static function email($data, $email)
     {
         if (empty(trim($email))) {
             $_SESSION['errCreate']['email']['invaild'] = 'Email can not be blank';
         } elseif (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
             $_SESSION['errCreate']['email']['invaild'] = 'Invalid email format';
-        } elseif ($count > 0) {
+        } elseif ($data) {
             $_SESSION['errCreate']['email']['invaild'] = 'Email exist';
         }
     }

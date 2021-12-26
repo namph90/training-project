@@ -1,8 +1,7 @@
 <?php
+require_once('controllers/validated/base_validated.php');
 
-require_once('models/validated/base_validated.php');
-
-class UserValidated extends BaseValidated
+class AdminValidated extends BaseValidated
 {
 
     public static function name($name)
@@ -25,17 +24,39 @@ class UserValidated extends BaseValidated
 
     public static function image($file)
     {
-        if (!isset($file)) {
+        if (!isset($file['name'])) {
             $_SESSION['errCreate']['image']['required'] = "Image can not be blank";
         } else {
             if ($file["size"] < 2048 || $file["size"] > 2097152) {
                 $_SESSION['errCreate']['image']['invaild'] = "Your file must be between 2KB and 2MG";
             }
+            //explode
             if (!(strtoupper(substr($file['name'], -4)) == ".JPG"
                 || strtoupper(substr($file['name'], -5)) == ".JPEG"
                 || strtoupper(substr($file['name'], -4)) == ".PNG")) {
                 $_SESSION['errCreate']['image']['invaild'] = "only JPG, JPEG, PNG & GIF files are allowed";
             }
+        }
+    }
+
+    public static function validateCreate($arr, $data, $file)
+    {
+        self::password($arr['password']);
+        self::email($data, $arr['email']);
+        self::name($arr['name']);
+        self::image($file);
+        self::password_confirm($arr['password'], $arr['password_confirm']);
+    }
+
+    public static function validateEdit($arr, $file)
+    {
+        self::name($arr['name']);
+        if (!empty($arr['password'])) {
+            self::password($arr['password']);
+            self::password_confirm($arr['password'], $arr['password_confirm']);
+        }
+        if (!empty($file["name"])) {
+            self::image($file);
         }
     }
 }
