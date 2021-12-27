@@ -1,10 +1,6 @@
 <?php
 session_start();
 require_once('connection.php');
-require_once('controllers/Validated/AdminValidated.php');
-require_once('controllers/Validated/UserValidated.php');
-require_once('controllers/function/UploadImages.php');
-require_once('controllers/function/Paginate.php');
 require_once('config/config.php');
 require_once('config/mess.php');
 

@@ -3,7 +3,7 @@
 
 class Paginate
 {
-    public static function  search() {
+    public function  search() {
         $searchName = isset($_GET["searchName"]) ? $_GET["searchName"] : "";
         $searchEmail = isset($_GET["searchEmail"]) ? $_GET["searchEmail"] : "";
         $sqlSearch = !empty($_GET["searchName"]) ? (!empty($_GET["searchEmail"]) ?
@@ -14,7 +14,7 @@ class Paginate
         $search = $name . $email;
         return ['sqlSearch'=>$sqlSearch, 'search'=>$search];
     }
-    public static function  order($columns) {
+    public function  order($columns) {
         $column = isset($_GET['column']) && in_array($_GET['column'], $columns, true) ? $_GET['column'] : $columns[0];
         $sort_order = isset($_GET['order']) && $_GET['order'] == 'desc' ? 'desc' : 'asc';
         $asc_or_desc = $sort_order == 'asc' ? 'desc' : 'asc';

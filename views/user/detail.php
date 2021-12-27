@@ -11,9 +11,9 @@
     <script src="assets/vendor/bootstrap.min.js"></script>
 </head>
 <body>
-<?php if (isset($_SESSION["LoginSuccess"])): ?>
-    <?php echo $_SESSION["LoginSuccess"]; ?>
-    <?php unset($_SESSION["LoginSuccess"]); ?>
+<?php if (isset($_SESSION["mess"])): ?>
+    <script type='text/javascript'>alert("<?php echo $_SESSION["mess"] ?>");</script>
+    <?php unset($_SESSION["mess"]); ?>
 <?php endif; ?>
 <nav class="navbar bg-light navbar-light">
 

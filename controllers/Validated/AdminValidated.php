@@ -4,7 +4,7 @@ require_once('controllers/validated/base_validated.php');
 class AdminValidated extends BaseValidated
 {
 
-    public static function name($name)
+    public function name($name)
     {
         if (empty(trim($name))) {
             $_SESSION['errCreate']['name']['invaild'] = 'Name can not be blank';
@@ -13,7 +13,7 @@ class AdminValidated extends BaseValidated
         }
     }
 
-    public static function password($pass)
+    public function password($pass)
     {
         if (empty(trim($pass))) {
             $_SESSION['errCreate']['password']['invaild'] = 'Password can not be blank';
@@ -22,7 +22,7 @@ class AdminValidated extends BaseValidated
         }
     }
 
-    public static function image($file)
+    public function image($file)
     {
         if (!isset($file['name'])) {
             $_SESSION['errCreate']['image']['required'] = "Image can not be blank";
@@ -39,24 +39,24 @@ class AdminValidated extends BaseValidated
         }
     }
 
-    public static function validateCreate($arr, $data, $file)
+    public function validateCreate($arr, $data, $file)
     {
-        self::password($arr['password']);
-        self::email($data, $arr['email']);
-        self::name($arr['name']);
-        self::image($file);
-        self::password_confirm($arr['password'], $arr['password_confirm']);
+        $this->password($arr['password']);
+        $this->email($data, $arr['email']);
+        $this->name($arr['name']);
+        $this->image($file);
+        $this->password_confirm($arr['password'], $arr['password_confirm']);
     }
 
-    public static function validateEdit($arr, $file)
+    public function validateEdit($arr, $file)
     {
-        self::name($arr['name']);
+        $this->name($arr['name']);
         if (!empty($arr['password'])) {
-            self::password($arr['password']);
-            self::password_confirm($arr['password'], $arr['password_confirm']);
+            $this->password($arr['password']);
+            $this->password_confirm($arr['password'], $arr['password_confirm']);
         }
         if (!empty($file["name"])) {
-            self::image($file);
+            $this->image($file);
         }
     }
 }

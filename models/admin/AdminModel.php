@@ -19,11 +19,12 @@ class AdminModel extends BaseModel
             'dataGetByEmail' => $dataGetByEmail
         );
     }
-
+//index
     public function show($sqlSearch, $sqlOrder, $from, $recordPerPage)
     {
-        $query = $this->conn->query("select * from $this->tabelName where del_flag = 0 $sqlSearch $sqlOrder limit  $from,$recordPerPage");
-        $count = $this->conn->query("select * from $this->tabelName where del_flag = 0 $sqlSearch $sqlOrder")->rowCount();
+        $sql = 'select * from $this->tabelName where del_flag = $this->active $sqlSearch $sqlOrder';
+        $query = $this->conn->query("$sql limit  $from,$recordPerPage");
+        $count = $this->conn->query("$sql")->rowCount();
         $data = $query->fetchAll();
         return array(
             'data' => $data,

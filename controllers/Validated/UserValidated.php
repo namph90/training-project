@@ -5,7 +5,7 @@ require_once('controllers/validated/base_validated.php');
 class UserValidated extends BaseValidated
 {
 
-    public static function name($name)
+    public function name($name)
     {
         if (empty(trim($name))) {
             $_SESSION['errCreate']['name']['invaild'] = 'Name can not be blank';
@@ -14,7 +14,7 @@ class UserValidated extends BaseValidated
         }
     }
 
-    public static function password($pass)
+    public function password($pass)
     {
         if (empty(trim($pass))) {
             $_SESSION['errCreate']['password']['invaild'] = 'Password can not be blank';
@@ -23,7 +23,7 @@ class UserValidated extends BaseValidated
         }
     }
 
-    public static function image($file)
+    public function image($file)
     {
         if (!isset($file)) {
             $_SESSION['errCreate']['image']['required'] = "Image can not be blank";
@@ -36,6 +36,27 @@ class UserValidated extends BaseValidated
                 || strtoupper(substr($file['name'], -4)) == ".PNG")) {
                 $_SESSION['errCreate']['image']['invaild'] = "only JPG, JPEG, PNG & GIF files are allowed";
             }
+        }
+    }
+
+    public function validateCreate($arr, $data, $file)
+    {
+        $this->password($arr['password']);
+        $this->email($data, $arr['email']);
+        $this->name($arr['name']);
+        $this->image($file);
+        $this->password_confirm($arr['password'], $arr['password_confirm']);
+    }
+
+    public function validateEdit($arr, $file)
+    {
+        $this->name($arr['name']);
+        if (!empty($arr['password'])) {
+            $this->password($arr['password']);
+            $this->password_confirm($arr['password'], $arr['password_confirm']);
+        }
+        if (!empty($file["name"])) {
+            $this->image($file);
         }
     }
 }

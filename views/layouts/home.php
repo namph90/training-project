@@ -12,7 +12,7 @@
 </head>
 <body>
 <?php if (isset($_SESSION["mess"])): ?>
-    <script type='text/javascript'>alert(<?php echo LOGIN_SUCCESSFUL ?>);</script>
+    <script type='text/javascript'>alert("<?php echo LOGIN_SUCCESSFUL ?>");</script>
     <?php unset($_SESSION["mess"]); ?>
 <?php endif; ?>
 

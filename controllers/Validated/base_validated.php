@@ -2,11 +2,11 @@
 
 abstract class BaseValidated
 {
-    abstract public static function name($name);
+    abstract public function name($name);
 
-    abstract public static function password($pass);
+    abstract public function password($pass);
 
-    public static function email($data, $email)
+    public function email($data, $email)
     {
         if (empty(trim($email))) {
             $_SESSION['errCreate']['email']['invaild'] = 'Email can not be blank';
@@ -16,7 +16,8 @@ abstract class BaseValidated
             $_SESSION['errCreate']['email']['invaild'] = 'Email exist';
         }
     }
-    public static function password_confirm($pass, $password_confirm)
+
+    public function password_confirm($pass, $password_confirm)
     {
         if (!isset($_SESSION['errCreate']['password'])) {
             if (empty(trim($password_confirm))) {
@@ -26,5 +27,6 @@ abstract class BaseValidated
             }
         }
     }
-    abstract public static function image($file);
+
+    abstract public function image($file);
 }

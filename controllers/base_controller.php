@@ -17,10 +17,11 @@ class BaseController
             require_once($view_file);
             $this->view = ob_get_contents();
             ob_get_clean();
-            if ($this->fileLayout != NULL)
+            if ($this->fileLayout != NULL)  {
                 require_once("views/$this->fileLayout");
-            else
+            } else {
                 echo $this->view;
+            }
         } else {
             header('Location: index.php?controller=home&action=error');
         }
@@ -28,14 +29,16 @@ class BaseController
 
     public function authenticationAdmin()
     {
-        if (!isset($_SESSION['admin']))
+        if (!isset($_SESSION['admin'])) {
             header("location:index.php?controller=login&action=login");
+        }
     }
 
     public function authenticationUser()
     {
-        if (!isset($_SESSION['user']))
-            header("location:index.php?controller=user&action=login");
+        if (!isset($_SESSION['user'])) {
+            header("location:login");
+        }
     }
 
     public function checkRole()

@@ -2,15 +2,24 @@
 
 require_once('controllers/base_controller.php');
 require_once('models/admin/AdminModel.php');
+require_once('controllers/Validated/AdminValidated.php');
+require_once('controllers/function/Paginate.php');
+require_once('controllers/function/UploadImages.php');
 require_once('config/config.php');
 
 class AdminController extends BaseController
 {
     public $model;
+    public $validated;
+    public $uploadImg;
+    public $paginate;
 
     public function __construct()
     {
         $this->model = new AdminModel();
+        $this->validated = new AdminValidated();
+        $this->uploadImg = new UploadImages();
+        $this->paginate = new Paginate();
         $this->authenticationAdmin();
         $this->checkRole();
     }
@@ -20,30 +29,20 @@ class AdminController extends BaseController
         $page = isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0 ? $_GET["page"] - 1 : 0;
         $from = $page * RECORDPERPAGE;
 
-        $searchName = isset($_GET["searchName"]) ? $_GET["searchName"] : "";
-        $searchEmail = isset($_GET["searchEmail"]) ? $_GET["searchEmail"] : "";
-        $sqlSearch = !empty($_GET["searchName"]) ? (!empty($_GET["searchEmail"]) ?
-            "and email like '%$searchEmail%' and name like '%$searchName%'" : "and name like '%$searchName%'") :
-            (!empty($_GET["searchEmail"]) ? "and email like '%$searchEmail%'" : " ");
-        $name = isset($_GET['searchName']) ? "&searchName=" . $_GET['searchName'] : "";
-        $email = isset($_GET['searchEmail']) ? "&searchEmail=" . $_GET['searchEmail'] : "";
-        $search = $name . $email;
-
+        $result = $this->paginate->search();
         $columns = array('id', 'name', 'email', 'role');
-        $column = isset($_GET['column']) && in_array($_GET['column'], $columns, true) ? $_GET['column'] : $columns[0];
-        $sort_order = isset($_GET['order']) && $_GET['order'] == 'desc' ? 'desc' : 'asc';
-        $asc_or_desc = $sort_order == 'asc' ? 'desc' : 'asc';
-        $sqlOrder = "order by $column $sort_order";
+        $order = $this->paginate->order($columns);
 
-        $dataAdmin = $this->model->show($sqlSearch, $sqlOrder, $from, RECORDPERPAGE);
+        $dataAdmin = $this->model->show($result['sqlSearch'], $order['sqlOrder'], $from, RECORDPERPAGE);
+
         $numPage = ceil($dataAdmin['count'] / RECORDPERPAGE);
         $arr = array(
             'data' => $dataAdmin['data'],
             "numPage" => $numPage,
-            "column" => $column,
-            "asc_or_desc" => $asc_or_desc,
-            "sort_order" => $sort_order,
-            "search" => $search
+            "column" => $order['column'],
+            "asc_or_desc" => $order['asc_or_desc'],
+            "sort_order" => $order['sort_order'],
+            "search" => $result['search']
         );
         $this->render("admin/m_admin/index", $arr);
     }
@@ -52,7 +51,7 @@ class AdminController extends BaseController
     {
         if (isset($_POST['submit'])) {
             $data = $this->model->getByEmail($_POST['email']);
-            AdminValidated::validateCreate($_POST, $data, $_FILES["avatar"]);
+            $this->validated->validateCreate($_POST, $data, $_FILES["avatar"]);
             $_SESSION['dl'] = $_POST;
 
             if (!isset($_SESSION['errCreate'])) {
@@ -94,7 +93,7 @@ class AdminController extends BaseController
             $avatar = $admin->avatar;
             $_SESSION['dl'] = $_POST;
 
-            AdminValidated::validateEdit($_POST, $_FILES["avatar"]);
+            $this->validated->validateEdit($_POST, $_FILES["avatar"]);
 
             if (!isset($_SESSION['errCreate'])) {
                 if ($_FILES["avatar"]["name"] != "") {
@@ -104,7 +103,7 @@ class AdminController extends BaseController
                         $path = PATH_UPLOAD_ADMIN . $id;
                         $pathOldAvatar = $path . '/' . $oldPhoto;
                         $pathNewAvatar = $path . '/' . $avatar;
-                        UploadImages::updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
+                        $this->uploadImg->updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
                     }
                 }
 
@@ -141,7 +140,7 @@ class AdminController extends BaseController
         $path = PATH_UPLOAD_ADMIN . $id;
 
         if ($result) {
-            UploadImages::deleteImage($path);
+            $this->uploadImg->deleteImage($path);
             $this->model->delete($id);
             if ($_SESSION['admin']['id'] == $id) {
                 unset($_SESSION['admin']);

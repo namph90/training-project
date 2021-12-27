@@ -32,7 +32,7 @@ $this->fileLayout = "layouts/home.php";
                     <div class="col-md-2"></div>
                     <div class="col-md-10">
                         <input type="submit" value="Search" class="btn btn-primary">
-                        <input type="button" value="Reset" class="btn btn-danger" onclick="Reset()">
+                        <input type="submit" value="Reset" class="btn btn-danger" onclick="Reset()">
                         <script>
                             function Reset() {
                                 document.getElementsByClassName("searchName")[0].removeAttribute("value");
@@ -89,7 +89,7 @@ $this->fileLayout = "layouts/home.php";
                         <td><?php echo $rows->id ?></td>
                         <td style="text-align: center;">
                             <?php if (file_exists(PATH_UPLOAD_USER . $rows->id . "/" . $rows->avatar)): ?>
-                                <img src="<?php echo PATH_UPLOAD_USER ?>/<?php echo $rows->id; ?>/<?php echo $rows->avatar; ?>"
+                                <img src="<?php echo PATH_UPLOAD_USER.$rows->id.'/'.$rows->avatar; ?> ?>"
                                      style="width: 70px;">
                             <?php endif; ?>
                         </td>

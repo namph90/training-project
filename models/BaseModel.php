@@ -6,24 +6,25 @@ abstract class BaseModel
 {
     protected $tabelName;
     protected $active;
+    protected $banned;
     protected $conn;
     public function __construct()
     {
         $this->active = ACTIVED;
+        $this->banned = BANNED;
         $this->conn = DB::getInstance();
         //can use __set __get
     }
 
     public function getById($id)
-    {;
+    {
         $query = $this->conn->query("select * from $this->tabelName where  id = $id and del_flag = $this->active");
         return $query->fetch();
     }
 
     public function getByEmail($email)
     {
-        $query = $this->conn->query("select * from $this->tabelName where  email = '$email' and del_flag = $this->active");
-        return $query->fetch();
+        return $this->conn->query("select * from $this->tabelName where  email = '$email' and del_flag = $this->active")->fetch();
     }
 
     public function getByEmailAndPass($email, $pass)
@@ -41,7 +42,7 @@ abstract class BaseModel
     public function create($data)
     {
         $ins = array(
-          'ins_id' => $_SESSION['admin']['id'],
+          'ins_id' => isset($_SESSION['admin']['id'])?$_SESSION['admin']['id']:9999,
           'ins_datetime' => date('Y-m-d H:i:s')
         );
         $fields = array_merge($data,$ins);
@@ -49,13 +50,14 @@ abstract class BaseModel
         $val = " values('";
         $val .= implode("' , '", array_values($fields)) . "');";
         $this->conn->query("$col $val");
+
         return $this->conn;
     }
 
     function update($data, $id)
     {
         $upd = array(
-            'upd_id' => $_SESSION['admin']['id'],
+            'upd_id' => isset($_SESSION['admin']['id']) ? $_SESSION['admin']['id'] : 99999999,
             'upd_datetime' => date('Y-m-d H:i:s')
         );
         $fields = array_merge($data,$upd);
@@ -64,6 +66,7 @@ abstract class BaseModel
             $fields[$key] = " $key = '" . $value . "' ";
         }
         $sql .= implode(" , ", array_values($fields)) . " where id = '" . $id . "';";
+
         return $this->conn->query((string)$sql);
     }
     function delete ($id) {

@@ -2,28 +2,38 @@
 
 class UploadImages
 {
-    public static function  createFolder($path) {
+    public function createFolder($path)
+    {
         if (!file_exists($path)) {
             mkdir($path, 0755, true);
         }
     }
-    public static function createImage($file, $path, $newPath)
+
+    public function createImage($file, $path, $newPath)
     {
         if ($file["name"] != "") {
-            self::createFolder($path);
+            $this->createFolder($path);
             move_uploaded_file($file["tmp_name"], $newPath);
         }
     }
 
-    public static function updateImage($file, $path, $pathOldAvatar, $pathNewAvatar)
+    public function createImageFb($url, $path, $newPath)
     {
-        self::createFolder($path);
+        $this->createFolder($path);
+        file_put_contents($newPath, file_get_contents($url));
+    }
+
+    public function updateImage($file, $path, $pathOldAvatar, $pathNewAvatar)
+    {
+        $this->createFolder($path);
         if (file_exists($pathOldAvatar)) {
             unlink($pathOldAvatar);
         }
         move_uploaded_file($file["tmp_name"], $pathNewAvatar);
     }
-    public static function deleteImage($path) {
+
+    public function deleteImage($path)
+    {
         $files = glob($path . '/*');
         foreach ($files as $file) {
             is_dir($file) ? deleteImage($file) : unlink($file);

@@ -101,7 +101,7 @@ $this->fileLayout = "layouts/home.php";
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-10">
-                                            <input type="submit" value="Create" class="btn btn-primary">
+                                            <input type="submit" name="submit" value="Create" class="btn btn-primary">
                                         </div>
                                     </div>
                                 </div>

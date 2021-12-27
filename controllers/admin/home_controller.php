@@ -9,8 +9,6 @@ class HomeController extends BaseController
         $this->authenticationAdmin();
     }
 
-//    public function __
-
     public function index()
     {
         $this->render("layouts/home");
