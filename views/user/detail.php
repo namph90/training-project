@@ -19,12 +19,11 @@
 
     <ul class="nav justify-content-end">
         <li class="nav-item">
-            <a class="nav-link" href="index.php?controller=user&action=logout">Logout</a>
+            <a class="nav-link" href="index.php?controller=loginUser&action=logout">Logout</a>
         </li>
     </ul>
 </nav>
 <br>
-
 <div class="container">
     <table style="text-align: center; border-collapse: collapse;">
             <tr >

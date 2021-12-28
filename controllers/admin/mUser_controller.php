@@ -64,7 +64,7 @@ class mUserController extends BaseController
                 $id = $conn->lastInsertId();
                 $path = PATH_UPLOAD_USER . $id;
                 $newPath = $path . '/' . $avatar;
-                UploadImages::createImage($_FILES["avatar"], $path, $newPath);
+                $this->uploadImg->createImage($_FILES["avatar"], $path, $newPath);
                 $_SESSION['success'] = CREATE_SUCCESSFUL;
                 unset($_SESSION['dl']);
                 header("location:index.php?controller=mUser&action=index");

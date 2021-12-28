@@ -12,7 +12,7 @@ if (isset($_GET['controller'])) {
         $action = 'index';
     }
 } else {
-    $controller = 'user';
+    $controller = 'loginUser';
     $action = 'login';
 }
 require_once('routes/routes.php');

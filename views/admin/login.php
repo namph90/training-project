@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="container" style="width: 500px; margin-top: 200px;">
-        <form method="post" action="index.php?controller=login&action=login">
+        <form method="post" action="index.php?controller=loginAdmin&action=login">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h2 class="text-center">LOGIN</h2>

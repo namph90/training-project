@@ -24,9 +24,9 @@ $this->fileLayout = "layouts/home.php";
                                         </div>
                                         <?php if (isset($_SESSION['errCreate']['image'])) : ?>
                                             <?php foreach ($_SESSION['errCreate']['image'] as $key => $value) : ?>
-                                                <div class="alert alert-danger" role="alert">
+                                                <p style="color: #ff0000;">
                                                     <?php echo $value; ?>
-                                                </div>
+                                                </p>
                                             <?php endforeach ?>
                                         <?php endif ?>
                                     </div>
@@ -37,9 +37,9 @@ $this->fileLayout = "layouts/home.php";
                                                    value="<?php echo isset($data->name) ? $data->name : (isset($_SESSION['dl']['name']) ? $_SESSION['dl']['name'] : "") ?>">
                                             <?php if (isset($_SESSION['errCreate']['name'])) : ?>
                                                 <?php foreach ($_SESSION['errCreate']['name'] as $key => $value) : ?>
-                                                    <div class="alert alert-danger" role="alert">
+                                                    <p style="color: #ff0000;">
                                                         <?php echo $value; ?>
-                                                    </div>
+                                                    </p>
                                                 <?php endforeach ?>
                                             <?php endif ?>
                                         </div>
@@ -51,9 +51,9 @@ $this->fileLayout = "layouts/home.php";
                                                    value="<?php echo isset($data->email) ? $data->email : (isset($_SESSION['dl']['email']) ? $_SESSION['dl']['email'] : "") ?>" <?php if(isset($data->email)): ?> disabled <?php endif; ?>>
                                             <?php if (isset($_SESSION['errCreate']['email'])) : ?>
                                                 <?php foreach ($_SESSION['errCreate']['email'] as $key => $value) : ?>
-                                                    <div class="alert alert-danger" role="alert">
+                                                    <p style="color: #ff0000;">
                                                         <?php echo $value; ?>
-                                                    </div>
+                                                    </p>
                                                 <?php endforeach ?>
                                             <?php endif ?>
                                         </div>
@@ -65,9 +65,9 @@ $this->fileLayout = "layouts/home.php";
                                                    value="<?php echo isset($_SESSION['dl']['password']) ? $_SESSION['dl']['password'] : "" ?>" <?php echo isset($data->password) ? " placeholder = 'Enter this field if you change your password'" : "" ?>>
                                             <?php if (isset($_SESSION['errCreate']['password'])) : ?>
                                                 <?php foreach ($_SESSION['errCreate']['password'] as $key => $value) : ?>
-                                                    <div class="alert alert-danger" role="alert">
+                                                    <p style="color: #ff0000;">
                                                         <?php echo $value; ?>
-                                                    </div>
+                                                    </p>
                                                 <?php endforeach ?>
                                             <?php endif ?>
                                         </div>
@@ -79,9 +79,9 @@ $this->fileLayout = "layouts/home.php";
                                                    value="<?php echo isset($_SESSION['dl']['password_confirm']) ? $_SESSION['dl']['password_confirm'] : "" ?>">
                                             <?php if (isset($_SESSION['errCreate']['confirmation_pwd'])) : ?>
                                                 <?php foreach ($_SESSION['errCreate']['confirmation_pwd'] as $key => $value) : ?>
-                                                    <div class="alert alert-danger" role="alert">
+                                                    <p style="color: #ff0000;">
                                                         <?php echo $value; ?>
-                                                    </div>
+                                                    </p>
                                                 <?php endforeach ?>
                                             <?php endif ?>
                                             <?php unset($_SESSION['errCreate']) ?>

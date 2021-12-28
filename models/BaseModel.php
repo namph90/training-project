@@ -18,7 +18,7 @@ abstract class BaseModel
 
     public function getById($id)
     {
-        $query = $this->conn->query("select * from $this->tabelName where  id = $id and del_flag = $this->active");
+        $query = $this->conn->query("select * from $this->tabelName where  id = '$id' and del_flag = '$this->active'");
         return $query->fetch();
     }
 
@@ -54,7 +54,7 @@ abstract class BaseModel
         return $this->conn;
     }
 
-    function update($data, $id)
+    public function update($data, $id)
     {
         $upd = array(
             'upd_id' => isset($_SESSION['admin']['id']) ? $_SESSION['admin']['id'] : 99999999,
@@ -66,10 +66,9 @@ abstract class BaseModel
             $fields[$key] = " $key = '" . $value . "' ";
         }
         $sql .= implode(" , ", array_values($fields)) . " where id = '" . $id . "';";
-
         return $this->conn->query((string)$sql);
     }
-    function delete ($id) {
+    public function delete ($id) {
         return $this->conn->query("update $this->tabelName set del_flag = 1 where id=$id");
     }
 }

@@ -1,5 +1,7 @@
 <?php
 $controllersAuth = array(
-    'login' => ['login', 'logout'],
-    'prefix' => 'admin/auth/',
+    'prefixUser' => 'user/auth/',
+    'loginAdmin' => ['login', 'logout'],
+    'loginUser' => ['login', 'logout', 'loginFb'],
+    'prefixAdmin' => 'admin/auth/'
 );

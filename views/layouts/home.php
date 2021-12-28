@@ -41,7 +41,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="index.php?controller=login&action=logout">Logout</a>
+            <a class="nav-link" href="index.php?controller=loginAdmin&action=logout">Logout</a>
         </li>
     </ul>
 </nav>

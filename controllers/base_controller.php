@@ -30,7 +30,7 @@ class BaseController
     public function authenticationAdmin()
     {
         if (!isset($_SESSION['admin'])) {
-            header("location:index.php?controller=login&action=login");
+            header("location:index.php?controller=loginAdmin&action=login");
         }
     }
 

@@ -1,5 +1,5 @@
 <?php
 $controllersUser = array(
-    'user' => ['login', 'details', 'logout','loginFb'],
+    'user' => ['details'],
     'prefix' => 'user/'
 );
