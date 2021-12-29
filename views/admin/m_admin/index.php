@@ -7,9 +7,10 @@ $this->fileLayout = "layouts/home.php";
     </div>
 <?php endif; ?>
 <?php unset($_SESSION['success']); ?>
+
 <div class="panel panel-primary">
     <div class="panel-body">
-        <form style="border: 1px solid black; padding: 20px;" method="get">
+        <form style="border: 1px solid black; padding: 20px;" method="get" action="<?php echo getImgUrl('index.php') ?>">
             <input type="hidden" class="form-control" name="controller" value="admin">
             <input type="hidden" class="form-control" name="action" value="index">
             <div class="form-horizontal">
@@ -49,23 +50,23 @@ $this->fileLayout = "layouts/home.php";
             <tr>
                 <th style="width: 50px;">
                     <a style="text-decoration: none; color:#34373a ;"
-                       href="index.php?controller=admin&action=index<?php echo $search ?>&column=id&order=<?php echo $asc_or_desc; ?>">
+                       href="<?php echo getImgUrl("index.php?controller=admin&action=index$search&column=id&order=$asc_or_desc") ?>">
                         ID <i
                                 class="fa fa-sort<?php echo $column == 'id' ? '-' . $sort_order : ''; ?>"
                                 aria-hidden="true"></i></a></th>
                 <th style="width: 100px;">Avatar</th>
                 <th style="width:200px;"><a style="text-decoration: none; color:#34373a ;"
-                                            href="index.php?controller=admin&action=index<?php echo $search; ?>&column=name&order=<?php echo $asc_or_desc; ?>">Name
+                                            href="<?php echo getImgUrl("index.php?controller=admin&action=index$search&column=name&order=$asc_or_desc") ?>">Name
                         <i
                                 class="fa fa-sort<?php echo $column == 'name' ? '-' . $sort_order : ''; ?>"
                                 aria-hidden="true"></i></a></th>
                 <th style="width: 200px;"><a style="text-decoration: none; color:#34373a ;"
-                                             href="index.php?controller=admin&action=index<?php echo $search; ?>&column=email&order=<?php echo $asc_or_desc; ?>">Email
+                                             href="<?php echo getImgUrl("index.php?controller=admin&action=index$search&column=email&order=$asc_or_desc") ?>">Email
                         <i
                                 class="fa fa-sort<?php echo $column == 'email' ? '-' . $sort_order : ''; ?>"
                                 aria-hidden="true"></i></a></th>
                 <th style="width: 100px;"><a style="text-decoration: none; color:#34373a ;"
-                                             href="index.php?controller=admin&action=index<?php echo $search; ?>&column=role&order=<?php echo $asc_or_desc; ?>">Role
+                                             href="<?php echo getImgUrl("index.php?controller=admin&action=index$search&column=role&order=$asc_or_desc") ?>">Role
                         <i
                                 class="fa fa-sort<?php echo $column == 'role' ? '-' . $sort_order : ''; ?>"
                                 aria-hidden="true"></i></a></th>
@@ -77,7 +78,7 @@ $this->fileLayout = "layouts/home.php";
                         <td><?php echo $rows->id ?></td>
                         <td style="text-align: center;">
                             <?php if (file_exists(PATH_UPLOAD_ADMIN . $rows->id . "/" . $rows->avatar)): ?>
-                                <img src="<?php echo PATH_UPLOAD_ADMIN.$rows->id.'/'.$rows->avatar; ?> ?>"
+                                <img src="<?php echo getImgUrl(PATH_UPLOAD_ADMIN . $rows->id . "/" . $rows->avatar); ?>"
                                      style="width: 70px;">
                             <?php endif; ?>
                         </td>
@@ -85,9 +86,9 @@ $this->fileLayout = "layouts/home.php";
                         <td><?php echo $rows->email ?></td>
                         <td><?php echo $rows->role ?></td>
                         <td style="text-align:center;">
-                            <a href="index.php?controller=admin&action=edit&id=<?php echo $rows->id; ?>"><i
+                            <a href="<?php echo getImgUrl("management/admin/edit/$rows->id") ?>"><i
                                         class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;
-                            <a href="index.php?controller=admin&action=delete&id=<?php echo $rows->id; ?>"
+                            <a href="<?php echo getImgUrl("management/admin/delete/$rows->id") ?>"
                                onclick="return window.confirm('Are you sure?');"><i class="fa fa-trash-o"
                                                                                     aria-hidden="true"></i></a>
                         </td>

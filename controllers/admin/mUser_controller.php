@@ -5,6 +5,7 @@ require_once('models/admin/UserModel.php');
 require_once('controllers/Validated/UserValidated.php');
 require_once('controllers/function/Paginate.php');
 require_once('controllers/function/UploadImages.php');
+require_once('controllers/function/Common.php');
 
 class mUserController extends BaseController
 {
@@ -67,12 +68,12 @@ class mUserController extends BaseController
                 $this->uploadImg->createImage($_FILES["avatar"], $path, $newPath);
                 $_SESSION['success'] = CREATE_SUCCESSFUL;
                 unset($_SESSION['dl']);
-                header("location:index.php?controller=mUser&action=index");
+                header("location:search");
             } else {
-                header("location:index.php?controller=mUser&action=create");
+                header("location:create");
             }
         } else {
-            $action = "index.php?controller=mUser&action=create";
+            $action = "management/user/create";
             $this->render("admin/m_user/create", ['action' => $action]);
         }
     }

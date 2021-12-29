@@ -11,14 +11,14 @@ $this->fileLayout = "layouts/home.php";
                         <div class="panel-heading" style="margin-bottom: 50px;">
                             <h4><?php echo $_GET['action'] == 'create' ? "Admin Create" : "Admin Edit" ?></h4></div>
                         <div class="panel-body">
-                            <form action="<?php echo $action; ?>" method="post"
+                            <form action="<?php echo getImgUrl($action) ?>" method="post"
                                   style="border: 1px solid black; padding: 20px;" enctype="multipart/form-data">
                                 <div class="form-horizontal">
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2">Avatar</div>
                                         <div class="col-md-10">
                                             <img id="output" class="img-rounded" alt="Ảnh" width="100"
-                                                 src="<?php echo isset($_SESSION['src']) ? $_SESSION['src'] : (isset($data->avatar) ? "assets/upload/admin/$data->id/$data->avatar" : "") ?>"/>
+                                                 src="<?php echo getImgUrl(isset($data->avatar) ? "assets/upload/admin/$data->id/$data->avatar" : "assets/upload/no-image-news.png"); ?>"/>
                                             <p><label for="ufile" style="cursor: pointer;">Chọn file ảnh</label></p>
                                             <input name="avatar" id="ufile" type="file" style="display:  none;"
                                                    onchange="loadFile(event)"/>

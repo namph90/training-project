@@ -5,6 +5,7 @@ require_once('models/admin/AdminModel.php');
 require_once('controllers/Validated/AdminValidated.php');
 require_once('controllers/function/Paginate.php');
 require_once('controllers/function/UploadImages.php');
+require_once('controllers/function/Common.php');
 require_once('config/config.php');
 
 class AdminController extends BaseController
@@ -71,15 +72,15 @@ class AdminController extends BaseController
                 $id = $conn->lastInsertId();
                 $path = PATH_UPLOAD_ADMIN . $id;
                 $newPath = $path . '/' . $avatar;
-                UploadImages::createImage($_FILES["avatar"], $path, $newPath);
+                $this->uploadImg->createImage($_FILES["avatar"], $path, $newPath);
                 $_SESSION['success'] = CREATE_SUCCESSFUL;
                 unset($_SESSION['dl']);
-                header("location:index.php?controller=admin&action=index");
+                header("location:search");
             } else {
-                header("location:index.php?controller=admin&action=create");
+                header("location:create");
             }
         } else {
-            $action = "index.php?controller=admin&action=create";
+            $action = "management/admin/create";
             $this->render("admin/m_admin/create", ['action' => $action]);
         }
     }
@@ -120,14 +121,14 @@ class AdminController extends BaseController
                 $this->model->update($arrUpdate, $id);
 
                 $_SESSION['success'] = UPDATE_SUCCESSFUL;
-                header("location:index.php?controller=admin&action=index");
+                header("location:../search");
                 unset($_SESSION['dl']);
             } else {
-                header("location:index.php?controller=admin&action=edit&id=$id");
+                header("location:../edit/$id");
             }
 
         } else {
-            $action = "index.php?controller=admin&action=edit&id=$id";
+            $action = "management/admin/edit/$id";
             $this->render("admin/m_admin/create", ['action' => $action, 'data' => $admin]);
         }
     }
@@ -148,6 +149,6 @@ class AdminController extends BaseController
                 $_SESSION['success'] = DELETE_SUCCESSFUL;
             }
         }
-        header("location:search");
+        header("location:../search");
     }
 }

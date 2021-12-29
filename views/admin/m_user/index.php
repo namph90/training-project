@@ -10,7 +10,7 @@ $this->fileLayout = "layouts/home.php";
 
 <div class="panel panel-primary">
     <div class="panel-body">
-        <form style="border: 1px solid black; padding: 20px;" method="get">
+        <form style="border: 1px solid black; padding: 20px;" method="get" action="<?php echo getImgUrl('index.php') ?>">
             <input type="hidden" class="form-control" name="controller" value="mUser">
             <input type="hidden" class="form-control" name="action" value="index">
             <div class="form-horizontal">
@@ -89,7 +89,7 @@ $this->fileLayout = "layouts/home.php";
                         <td><?php echo $rows->id ?></td>
                         <td style="text-align: center;">
                             <?php if (file_exists(PATH_UPLOAD_USER . $rows->id . "/" . $rows->avatar)): ?>
-                                <img src="<?php echo PATH_UPLOAD_USER.$rows->id.'/'.$rows->avatar; ?> ?>"
+                                <img src="<?php echo getImgUrl(PATH_UPLOAD_USER . $rows->id . "/" . $rows->avatar); ?>"
                                      style="width: 70px;">
                             <?php endif; ?>
                         </td>
@@ -97,9 +97,9 @@ $this->fileLayout = "layouts/home.php";
                         <td><?php echo $rows->email ?></td>
                         <td><?php echo $rows->status ?></td>
                         <td style="text-align:center;">
-                            <a href="index.php?controller=mUser&action=edit&id=<?php echo $rows->id; ?>"><i
+                            <a href="<?php echo getImgUrl("management/user/edit/$rows->id") ?>"><i
                                         class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;
-                            <a href="index.php?controller=mUser&action=delete&id=<?php echo $rows->id; ?>"
+                            <a href="<?php echo getImgUrl("management/user/delete/$rows->id") ?>"
                                onclick="return window.confirm('Are you sure?');"><i class="fa fa-trash-o"
                                                                                     aria-hidden="true"></i></a>
                         </td>

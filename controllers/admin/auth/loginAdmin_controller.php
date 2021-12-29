@@ -3,6 +3,7 @@
 require_once('controllers/base_controller.php');
 require_once('models/admin/AdminModel.php');
 require_once('config/mess.php');
+require_once('controllers/function/Common.php');
 
 class LoginAdminController extends BaseController
 {
@@ -32,17 +33,17 @@ class LoginAdminController extends BaseController
 
                 $_SESSION["mess"] = LOGIN_SUCCESSFUL;
                 unset($_SESSION['email_create']);
-                header("location:index.php?controller=home&action=index");
+                header("location:index");
             } elseif (!isset($dataGetByEmail->id)) {
                 $_SESSION['err_email'] = ERROR_LOGIN_EMAIL;
-                header("location:index.php?controller=loginAdmin&action=login");
+                header("location:login");
             } elseif (!isset($dataGetByEmailPass->id)) {
                 $_SESSION['err_pass'] = ERROR_LOGIN_PASS;
-                header("location:index.php?controller=loginAdmin&action=login");
+                header("location:login");
             }
         } else {
             if (isset($_SESSION['admin'])) {
-                header("location:index.php?controller=home&action=index");
+                header("location:index");
             }
             $this->render("admin/login");
         }
@@ -51,6 +52,6 @@ class LoginAdminController extends BaseController
     public function logout()
     {
         unset($_SESSION["admin"]);
-        header("location:index.php?controller=loginAdmin&action=login");
+        header("location:login");
     }
 }
