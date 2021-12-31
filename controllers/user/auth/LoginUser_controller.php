@@ -13,6 +13,7 @@ class LoginUserController extends BaseController
     {
         $this->model = new UserModel();
     }
+
     public function login()
     {
         if (isset($_POST['submit'])) {
@@ -50,11 +51,13 @@ class LoginUserController extends BaseController
             $this->render("user/login", ['loginUrl' => $loginUrl]);
         }
     }
+
     public function logout()
     {
         unset($_SESSION["user"]);
         header("location:login");
     }
+
     public function loginFb()
     {
         require_once('config/fbconfig.php');
@@ -98,7 +101,7 @@ class LoginUserController extends BaseController
         $userGetByEmail = $this->model->getByEmail($email);
         if ($check) {
             $id = $check->id;
-            $this->model->update(['del_flag' => ACTIVED, 'avatar'=>$avatar], $id);
+            $this->model->update(['del_flag' => ACTIVED, 'avatar' => $avatar], $id);
             $path = PATH_UPLOAD_USER . $id;
             $newPath = $path . '/' . $avatar;
             createImageFb($url, $path, $newPath);
@@ -116,13 +119,13 @@ class LoginUserController extends BaseController
             $newPath = $path . '/' . $avatar;
             createImageFb($url, $path, $newPath);
         }
-            $data = $this->model->getByEmail($user['email']);
-            $_SESSION['user'] = array(
-                "id" => $data->id,
-                "email" => $data->email
-            );
-            $_SESSION["LoginSuccess"] = LOGIN_SUCCESSFUL;
-            header("location:profile");
-        }
+        $data = $this->model->getByEmail($user['email']);
+        $_SESSION['user'] = array(
+            "id" => $data->id,
+            "email" => $data->email
+        );
+        $_SESSION["LoginSuccess"] = LOGIN_SUCCESSFUL;
+        header("location:profile");
+    }
 
 }

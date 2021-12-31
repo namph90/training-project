@@ -11,7 +11,7 @@ class UserModel extends BaseModel
         $this->tabelName = 'users';
     }
 
-    public function show($sqlSearch, $sqlOrder)
+    public function list($sqlSearch, $sqlOrder)
     {
         $query = $this->conn->query("select * from $this->tabelName where del_flag = $this->active $sqlSearch $sqlOrder");
         return $query->fetchAll();

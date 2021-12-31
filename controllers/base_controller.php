@@ -9,15 +9,16 @@ class BaseController
     public function render($fileName, $data = NULL)
     {
         $view_file = 'views/' . $fileName . '.php';
-        if (!is_null($data))
+        if (!is_null($data)){
             extract($data);
+        }
         if (file_exists($view_file)) {
             $this->fileName = $fileName;
             ob_start();
             require_once($view_file);
             $this->view = ob_get_contents();
             ob_get_clean();
-            if ($this->fileLayout != NULL)  {
+            if ($this->fileLayout != NULL) {
                 require_once("views/$this->fileLayout");
             } else {
                 echo $this->view;
@@ -31,14 +32,14 @@ class BaseController
     {
         $url = getImgUrl('management/login');
         if (!isset($_SESSION['admin'])) {
-            header("location:".getImgUrl('management/login'));
+            header("location:" . getImgUrl('management/login'));
         }
     }
 
     public function authenticationUser()
     {
         if (!isset($_SESSION['user'])) {
-            header("location:".getImgUrl('login'));
+            header("location:" . getImgUrl('login'));
         }
     }
 
@@ -46,7 +47,7 @@ class BaseController
     {
         if (isset($_SESSION['admin']) && $_SESSION['admin']['role'] == "Admin") {
             echo "<script type='text/javascript'>alert('you do not have permission to access');</script>";
-            header("location:".getImgUrl('management/index'));
+            header("location:" . getImgUrl('management/index'));
         }
 
     }

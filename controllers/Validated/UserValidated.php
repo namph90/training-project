@@ -5,13 +5,13 @@ require_once('controllers/validated/base_validated.php');
 class UserValidated extends BaseValidated
 {
 
-    public function name($name)
+    public function validateCreate($arr, $data, $file)
     {
-        if (empty(trim($name))) {
-            $_SESSION['errCreate']['name']['invaild'] = ERR_NAME_INVAILD;
-        } elseif (strlen(trim($name)) < 6 || strlen(trim($name)) > 200) {
-            $_SESSION['errCreate']['name']['invaild'] = ERR_NAME_BETWEEN;
-        }
+        $this->password($arr['password']);
+        $this->email($data, $arr['email']);
+        $this->name($arr['name']);
+        $this->image($file);
+        $this->password_confirm($arr['password'], $arr['password_confirm']);
     }
 
     public function password($pass)
@@ -23,29 +23,29 @@ class UserValidated extends BaseValidated
         }
     }
 
-    public function image($file)
+    public function name($name)
     {
-        if (!isset($file)) {
-            $_SESSION['errCreate']['image']['required'] = ERR_IMG_INVAILD;
-        } else {
-            if ($file["size"] < 2048 || $file["size"] > 2097152) {
-                $_SESSION['errCreate']['image']['invaild'] = ERR_PASS_BETWEEN;
-            }
-            $fileName = explode(".",$file['name']);
-            $fileName = strtoupper($fileName[1]);
-            if (!($fileName == ".JPG" || $fileName)== ".JPEG" || $fileName == ".PNG") {
-                $_SESSION['errCreate']['image']['invaild'] = ERR_IMG_TYPE;
-            }
+        if (empty(trim($name))) {
+            $_SESSION['errCreate']['name']['invaild'] = ERR_NAME_INVAILD;
+        } elseif (strlen(trim($name)) < 6 || strlen(trim($name)) > 200) {
+            $_SESSION['errCreate']['name']['invaild'] = ERR_NAME_BETWEEN;
         }
     }
 
-    public function validateCreate($arr, $data, $file)
+    public function image($file)
     {
-        $this->password($arr['password']);
-        $this->email($data, $arr['email']);
-        $this->name($arr['name']);
-        $this->image($file);
-        $this->password_confirm($arr['password'], $arr['password_confirm']);
+        if (empty($file['name'])) {
+            $_SESSION['errCreate']['image']['required'] = ERR_IMG_INVAILD;
+        } else {
+            if ($file["size"] < 2048 || $file["size"] > 2097152) {
+                $_SESSION['errCreate']['image']['invaild'] = ERR_IMG_BETWEEN;
+            }
+            $fileName = explode(".", $file['name']);
+            $fileName = strtoupper($fileName[1]);
+            if (!($fileName == "JPG" || $fileName == "JPEG" || $fileName == "PNG")) {
+                $_SESSION['errCreate']['image']['invaild'] = ERR_IMG_TYPE;
+            }
+        }
     }
 
     public function validateEdit($arr, $file)

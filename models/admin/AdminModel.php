@@ -20,7 +20,7 @@ class AdminModel extends BaseModel
         );
     }
 //index
-    public function show($sqlSearch, $sqlOrder, $from, $recordPerPage)
+    public function list($sqlSearch, $sqlOrder, $from, $recordPerPage)
     {
         $sql = "select * from $this->tabelName where del_flag = $this->active $sqlSearch $sqlOrder";
         $query = $this->conn->query("$sql limit  $from,$recordPerPage");

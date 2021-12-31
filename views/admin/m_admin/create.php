@@ -18,14 +18,14 @@ $this->fileLayout = "layouts/home.php";
                                         <div class="col-md-2">Avatar</div>
                                         <div class="col-md-10">
                                             <img id="output" class="img-rounded" alt="Ảnh" width="100"
-                                                 src="<?php echo getImgUrl(isset($data->avatar) ? "assets/upload/admin/$data->id/$data->avatar" : "assets/upload/no-image-news.png"); ?>"/>
+                                                 src="<?php echo getImgUrl(isset($data->avatar) ? PATH_UPLOAD_ADMIN . $data->id . '/' . $data->avatar : "assets/upload/no-image-news.png"); ?>"/>
                                             <p><label for="ufile" style="cursor: pointer;">Chọn file ảnh</label></p>
                                             <input name="avatar" id="ufile" type="file" style="display:  none;"
                                                    onchange="loadFile(event)"/>
+                                            <?php if (isset($_SESSION['errCreate']['image'])) : ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE . "error.php", ['err' => $_SESSION['errCreate']['image']], true) ?>
+                                            <?php endif ?>
                                         </div>
-                                        <?php if (isset($_SESSION['errCreate']['image'])) : ?>
-                                            <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['image']],true) ?>
-                                        <?php endif ?>
                                     </div>
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2">Name</div>
@@ -33,7 +33,7 @@ $this->fileLayout = "layouts/home.php";
                                             <input type="text" class="form-control" name="name"
                                                    value="<?php echo isset($data->name) ? $data->name : (isset($_SESSION['dl']['name']) ? $_SESSION['dl']['name'] : "") ?>">
                                             <?php if (isset($_SESSION['errCreate']['name'])) : ?>
-                                                <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['name']],true) ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE . "error.php", ['err' => $_SESSION['errCreate']['name']], true) ?>
                                             <?php endif ?>
                                         </div>
                                     </div>
@@ -43,7 +43,7 @@ $this->fileLayout = "layouts/home.php";
                                             <input type="text" class="form-control" name="email"
                                                    value="<?php echo isset($data->email) ? $data->email : (isset($_SESSION['dl']['email']) ? $_SESSION['dl']['email'] : "") ?>" <?php if (isset($data->email)): ?> disabled <?php endif; ?>>
                                             <?php if (isset($_SESSION['errCreate']['email'])) : ?>
-                                                <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['email']],true) ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE . "error.php", ['err' => $_SESSION['errCreate']['email']], true) ?>
                                             <?php endif ?>
                                         </div>
                                     </div>
@@ -53,7 +53,7 @@ $this->fileLayout = "layouts/home.php";
                                             <input type="password" class="form-control" name="password"
                                                    value="<?php echo isset($_SESSION['dl']['password']) ? $_SESSION['dl']['password'] : "" ?>" <?php echo isset($data->password) ? " placeholder = 'Enter this field if you change your password'" : "" ?>>
                                             <?php if (isset($_SESSION['errCreate']['password'])) : ?>
-                                                <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['password']],true) ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE . "error.php", ['err' => $_SESSION['errCreate']['password']], true) ?>
                                             <?php endif ?>
                                         </div>
                                     </div>
@@ -63,7 +63,7 @@ $this->fileLayout = "layouts/home.php";
                                             <input type="password" class="form-control" name="password_confirm"
                                                    value="<?php echo isset($_SESSION['dl']['password_confirm']) ? $_SESSION['dl']['password_confirm'] : "" ?>">
                                             <?php if (isset($_SESSION['errCreate']['confirmation_pwd'])) : ?>
-                                                <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['confirmation_pwd']],true) ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE . "error.php", ['err' => $_SESSION['errCreate']['confirmation_pwd']], true) ?>
                                             <?php endif ?>
                                             <?php unset($_SESSION['errCreate']) ?>
                                             <?php unset($_SESSION['dl']) ?>

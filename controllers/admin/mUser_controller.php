@@ -27,7 +27,7 @@ class mUserController extends BaseController
         $columns = array('id', 'name', 'email', 'status');
         $order = order($columns);
 
-        $data = $this->model->show($result['sqlSearch'], $order['sqlOrder']);
+        $data = $this->model->list($result['sqlSearch'], $order['sqlOrder']);
         $arr = array(
             'data' => $data,
             'column' => $order['column'],
@@ -59,10 +59,12 @@ class mUserController extends BaseController
                     "avatar" => $avatar
                 );
                 $conn = $this->model->create($arrInsert);
+
                 $id = $conn->lastInsertId();
                 $path = PATH_UPLOAD_USER . $id;
                 $newPath = $path . '/' . $avatar;
                 createImage($_FILES["avatar"], $path, $newPath);
+
                 $_SESSION['success'] = CREATE_SUCCESSFUL;
                 unset($_SESSION['dl']);
                 header("location:search");

@@ -24,15 +24,15 @@ class AdminValidated extends BaseValidated
 
     public function image($file)
     {
-        if (!isset($file['name'])) {
+        if (empty($file['name'])) {
             $_SESSION['errCreate']['image']['required'] = ERR_IMG_INVAILD;
         } else {
             if ($file["size"] < 2048 || $file["size"] > 2097152) {
                 $_SESSION['errCreate']['image']['invaild'] = ERR_IMG_BETWEEN;
             }
-            $fileName = explode(".",$file['name']);
+            $fileName = explode(".", $file['name']);
             $fileName = strtoupper($fileName[1]);
-            if (!($fileName == ".JPG" || $fileName)== ".JPEG" || $fileName == ".PNG") {
+            if (!($fileName == "JPG" || $fileName == "JPEG" || $fileName == "PNG")) {
                 $_SESSION['errCreate']['image']['invaild'] = ERR_IMG_TYPE;
             }
         }

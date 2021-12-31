@@ -21,10 +21,11 @@ $this->fileLayout = "layouts/home.php";
                                             <p><label for="ufile" style="cursor: pointer;">Chọn file ảnh</label></p>
                                             <input name="avatar" id="ufile" type="file" style="display:  none;"
                                                    onchange="loadFile(event)"/>
+                                            <?php if (isset($_SESSION['errCreate']['image'])) : ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['image']],true) ?>
+                                            <?php endif ?>
                                         </div>
-                                        <?php if (isset($_SESSION['errCreate']['image'])) : ?>
-                                            <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['image']],true) ?>
-                                        <?php endif ?>
+
                                     </div>
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2">Name</div>

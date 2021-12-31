@@ -7,7 +7,6 @@ require_once('function/Paginate.php');
 require_once('function/UploadImages.php');
 require_once('function/Common.php');
 require_once('views/elements/error.php');
-require_once('config/config.php');
 
 class AdminController extends BaseController
 {
@@ -30,7 +29,7 @@ class AdminController extends BaseController
         $result = search();
         $columns = array('id', 'name', 'email', 'role');
         $order = order($columns);
-        $dataAdmin = $this->model->show($result['sqlSearch'], $order['sqlOrder'], $from, RECORDPERPAGE);
+        $dataAdmin = $this->model->list($result['sqlSearch'], $order['sqlOrder'], $from, RECORDPERPAGE);
         $numPage = ceil($dataAdmin['count'] / RECORDPERPAGE);
         $arr = array(
             'data' => $dataAdmin['data'],
@@ -65,9 +64,11 @@ class AdminController extends BaseController
                 );
                 $conn = $this->model->create($arrInsert);
                 $id = $conn->lastInsertId();
+
                 $path = PATH_UPLOAD_ADMIN . $id;
                 $newPath = $path . '/' . $avatar;
                 createImage($_FILES["avatar"], $path, $newPath);
+
                 $_SESSION['success'] = CREATE_SUCCESSFUL;
                 unset($_SESSION['dl']);
                 header("location:search");
@@ -121,7 +122,6 @@ class AdminController extends BaseController
             } else {
                 header("location:../edit/$id");
             }
-
         } else {
             $action = "management/admin/edit/$id";
             $this->render("admin/m_admin/create", ['action' => $action, 'data' => $admin]);
@@ -144,6 +144,6 @@ class AdminController extends BaseController
                 $_SESSION['success'] = DELETE_SUCCESSFUL;
             }
         }
-            header("location:../search");
+        header("location:../search");
     }
 }
