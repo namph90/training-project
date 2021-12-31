@@ -3,6 +3,7 @@
 require_once('controllers/base_controller.php');
 require_once('models/admin/UserModel.php');
 require_once('assets/Facebook/autoload.php');
+require_once('function/Common.php');
 
 class UserController extends BaseController
 {

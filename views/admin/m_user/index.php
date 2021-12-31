@@ -10,9 +10,7 @@ $this->fileLayout = "layouts/home.php";
 
 <div class="panel panel-primary">
     <div class="panel-body">
-        <form style="border: 1px solid black; padding: 20px;" method="get" action="<?php echo getImgUrl('index.php') ?>">
-            <input type="hidden" class="form-control" name="controller" value="mUser">
-            <input type="hidden" class="form-control" name="action" value="index">
+        <form style="border: 1px solid black; padding: 20px;" method="get" action="<?php echo getImgUrl('management/user/search') ?>">
             <div class="form-horizontal">
                 <div class="row" style="margin-top:15px;">
                     <div class="col-md-2">Name</div>
@@ -50,7 +48,7 @@ $this->fileLayout = "layouts/home.php";
             <tr>
                 <th style="width: 50px;">
                     <a style="text-decoration: none; color:#34373a ;"
-                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=id&order=<?php echo $asc_or_desc; ?>">
+                       href="<?php echo getImgUrl('management/user/search'.$search.'column=id&order='.$asc_or_desc) ?>">
                         ID
                         <i class="fa fa-sort<?php echo $column == 'id' ? '-' . $sort_order : ''; ?>"
                            aria-hidden="true"></i>
@@ -59,7 +57,7 @@ $this->fileLayout = "layouts/home.php";
                 <th style="width: 100px;">Avatar</th>
                 <th style="width:150px;">
                     <a style="text-decoration: none; color:#34373a ;"
-                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=name&order=<?php echo $asc_or_desc; ?>">
+                       href="<?php echo getImgUrl('management/user/search'.$search.'column=name&order='.$asc_or_desc) ?>">
                         Name
                         <i class="fa fa-sort<?php echo $column == 'name' ? '-' . $sort_order : ''; ?>"
                            aria-hidden="true"></i>
@@ -67,7 +65,7 @@ $this->fileLayout = "layouts/home.php";
                 </th>
                 <th style="width: 100px;">
                     <a style="text-decoration: none; color:#34373a ;"
-                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=email&order=<?php echo $asc_or_desc; ?>">
+                       href="<?php echo getImgUrl('management/user/search'.$search.'column=email&order='.$asc_or_desc) ?>">
                         Email
                         <i class="fa fa-sort<?php echo $column == 'email' ? '-' . $sort_order : ''; ?>"
                            aria-hidden="true"></i>
@@ -75,7 +73,7 @@ $this->fileLayout = "layouts/home.php";
                 </th>
                 <th style="width: 80px;">
                     <a style="text-decoration: none; color:#34373a ;"
-                       href="index.php?controller=mUser&action=index<?php echo $search ?>&column=status&order=<?php echo $asc_or_desc; ?>">
+                       href="<?php echo getImgUrl('management/user/search'.$search.'column=status&order='.$asc_or_desc) ?>">
                         Status
                         <i class="fa fa-sort<?php echo $column == 'status' ? '-' . $sort_order : ''; ?>"
                            aria-hidden="true"></i>

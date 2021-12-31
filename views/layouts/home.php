@@ -35,7 +35,7 @@
             </a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="<?php echo getImgUrl('management/user/search') ?>">Search</a>
-                <a class="dropdown-item" href="<?php echo getImgUrl('index.php?controller=mUser&action=create') ?>">Create</a>
+                <a class="dropdown-item" href="<?php echo getImgUrl('management/user/create') ?>">Create</a>
             </div>
         </li>
 

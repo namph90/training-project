@@ -17,17 +17,13 @@ $this->fileLayout = "layouts/home.php";
                                         <div class="col-md-2">Avatar</div>
                                         <div class="col-md-10">
                                             <img id="output" class="img-rounded" alt="Ảnh" width="100"
-                                                 src="<?php echo isset($data->avatar) ? PATH_UPLOAD_USER.$data->id.'/'.$data->avatar : ""?>"/>
+                                                 src="<?php echo getImgUrl(isset($data->avatar) ? PATH_UPLOAD_USER.$data->id.'/'.$data->avatar : "assets/upload/no-image-news.png"); ?>"/>
                                             <p><label for="ufile" style="cursor: pointer;">Chọn file ảnh</label></p>
                                             <input name="avatar" id="ufile" type="file" style="display:  none;"
                                                    onchange="loadFile(event)"/>
                                         </div>
                                         <?php if (isset($_SESSION['errCreate']['image'])) : ?>
-                                            <?php foreach ($_SESSION['errCreate']['image'] as $key => $value) : ?>
-                                                <p style="color: #ff0000;">
-                                                    <?php echo $value; ?>
-                                                </p>
-                                            <?php endforeach ?>
+                                            <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['image']],true) ?>
                                         <?php endif ?>
                                     </div>
                                     <div class="row" style="margin-top:15px;">
@@ -36,11 +32,7 @@ $this->fileLayout = "layouts/home.php";
                                             <input type="text" class="form-control" name="name"
                                                    value="<?php echo isset($data->name) ? $data->name : (isset($_SESSION['dl']['name']) ? $_SESSION['dl']['name'] : "") ?>">
                                             <?php if (isset($_SESSION['errCreate']['name'])) : ?>
-                                                <?php foreach ($_SESSION['errCreate']['name'] as $key => $value) : ?>
-                                                    <p style="color: #ff0000;">
-                                                        <?php echo $value; ?>
-                                                    </p>
-                                                <?php endforeach ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['name']],true) ?>
                                             <?php endif ?>
                                         </div>
                                     </div>
@@ -50,11 +42,7 @@ $this->fileLayout = "layouts/home.php";
                                             <input type="text" class="form-control" name="email"
                                                    value="<?php echo isset($data->email) ? $data->email : (isset($_SESSION['dl']['email']) ? $_SESSION['dl']['email'] : "") ?>" <?php if(isset($data->email)): ?> disabled <?php endif; ?>>
                                             <?php if (isset($_SESSION['errCreate']['email'])) : ?>
-                                                <?php foreach ($_SESSION['errCreate']['email'] as $key => $value) : ?>
-                                                    <p style="color: #ff0000;">
-                                                        <?php echo $value; ?>
-                                                    </p>
-                                                <?php endforeach ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['email']],true) ?>
                                             <?php endif ?>
                                         </div>
                                     </div>
@@ -64,11 +52,7 @@ $this->fileLayout = "layouts/home.php";
                                             <input type="password" class="form-control" name="password"
                                                    value="<?php echo isset($_SESSION['dl']['password']) ? $_SESSION['dl']['password'] : "" ?>" <?php echo isset($data->password) ? " placeholder = 'Enter this field if you change your password'" : "" ?>>
                                             <?php if (isset($_SESSION['errCreate']['password'])) : ?>
-                                                <?php foreach ($_SESSION['errCreate']['password'] as $key => $value) : ?>
-                                                    <p style="color: #ff0000;">
-                                                        <?php echo $value; ?>
-                                                    </p>
-                                                <?php endforeach ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['password']],true) ?>
                                             <?php endif ?>
                                         </div>
                                     </div>
@@ -78,11 +62,7 @@ $this->fileLayout = "layouts/home.php";
                                             <input type="password" class="form-control" name="password_confirm"
                                                    value="<?php echo isset($_SESSION['dl']['password_confirm']) ? $_SESSION['dl']['password_confirm'] : "" ?>">
                                             <?php if (isset($_SESSION['errCreate']['confirmation_pwd'])) : ?>
-                                                <?php foreach ($_SESSION['errCreate']['confirmation_pwd'] as $key => $value) : ?>
-                                                    <p style="color: #ff0000;">
-                                                        <?php echo $value; ?>
-                                                    </p>
-                                                <?php endforeach ?>
+                                                <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errCreate']['confirmation_pwd']],true) ?>
                                             <?php endif ?>
                                             <?php unset($_SESSION['errCreate']) ?>
                                             <?php unset($_SESSION['dl']) ?>
@@ -114,8 +94,8 @@ $this->fileLayout = "layouts/home.php";
     </main>
 </div>
 <script>
-    var loadFile = function (event) {
-        var image = document.getElementById('output');
+    const loadFile = function (event) {
+        const image = document.getElementById('output');
         image.src = URL.createObjectURL(event.target.files[0]);
     };
 </script>

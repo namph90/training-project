@@ -3,32 +3,29 @@
 require_once('controllers/base_controller.php');
 require_once('models/admin/UserModel.php');
 require_once('controllers/Validated/UserValidated.php');
-require_once('controllers/function/Paginate.php');
-require_once('controllers/function/UploadImages.php');
-require_once('controllers/function/Common.php');
+require_once('function/Paginate.php');
+require_once('function/UploadImages.php');
+require_once('views/elements/error.php');
+require_once('function/Common.php');
 
 class mUserController extends BaseController
 {
     public $model;
     public $validated;
-    public $uploadImg;
-    public $paginate;
 
     public function __construct()
     {
         $this->model = new UserModel();
         $this->validated = new UserValidated();
-        $this->uploadImg = new UploadImages();
-        $this->paginate = new Paginate();
         $this->authenticationAdmin();
     }
 
     public function index()
     {
-        $result = $this->paginate->search();
+        $result = search();
 
         $columns = array('id', 'name', 'email', 'status');
-        $order = $this->paginate->order($columns);
+        $order = order($columns);
 
         $data = $this->model->show($result['sqlSearch'], $order['sqlOrder']);
         $arr = array(
@@ -65,7 +62,7 @@ class mUserController extends BaseController
                 $id = $conn->lastInsertId();
                 $path = PATH_UPLOAD_USER . $id;
                 $newPath = $path . '/' . $avatar;
-                $this->uploadImg->createImage($_FILES["avatar"], $path, $newPath);
+                createImage($_FILES["avatar"], $path, $newPath);
                 $_SESSION['success'] = CREATE_SUCCESSFUL;
                 unset($_SESSION['dl']);
                 header("location:search");
@@ -98,7 +95,7 @@ class mUserController extends BaseController
                         $path = PATH_UPLOAD_USER . $id;
                         $pathOldAvatar = $path . '/' . $oldPhoto;
                         $pathNewAvatar = $path . '/' . $avatar;
-                        $this->uploadImg->updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
+                        updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
                     }
                 }
 
@@ -115,14 +112,14 @@ class mUserController extends BaseController
                 $this->model->update($arrUpdate, $id);
 
                 $_SESSION['success'] = UPDATE_SUCCESSFUL;
-                header("location:index.php?controller=mUser&action=index");
+                header("location:../search");
                 unset($_SESSION['dl']);
             } else {
-                header("location:index.php?controller=mUser&action=edit&id=$id");
+                header("location:../edit/$id");
             }
 
         } else {
-            $action = "index.php?controller=mUser&action=edit&id=$id";
+            $action = "management/user/edit/$id";
             $this->render("admin/m_user/create", ['action' => $action, 'data' => $admin]);
         }
     }
@@ -134,10 +131,10 @@ class mUserController extends BaseController
         $path = PATH_UPLOAD_USER . $id;
 
         if ($result) {
-            $this->uploadImg->deleteImage($path);
+            deleteImage($path);
             $this->model->delete($id);
             $_SESSION['success'] = DELETE_SUCCESSFUL;
         }
-        header("location:index.php?controller=mUser&action=index");
+        header("location:../search");
     }
 }

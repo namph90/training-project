@@ -29,15 +29,16 @@ class BaseController
 
     public function authenticationAdmin()
     {
+        $url = getImgUrl('management/login');
         if (!isset($_SESSION['admin'])) {
-            header("location:index.php?controller=loginAdmin&action=login");
+            header("location:".getImgUrl('management/login'));
         }
     }
 
     public function authenticationUser()
     {
         if (!isset($_SESSION['user'])) {
-            header("location:login");
+            header("location:".getImgUrl('login'));
         }
     }
 
@@ -45,7 +46,7 @@ class BaseController
     {
         if (isset($_SESSION['admin']) && $_SESSION['admin']['role'] == "Admin") {
             echo "<script type='text/javascript'>alert('you do not have permission to access');</script>";
-            header("location:index.php?controller=home&action=index");
+            header("location:".getImgUrl('management/index'));
         }
 
     }

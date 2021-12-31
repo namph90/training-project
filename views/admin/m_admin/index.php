@@ -10,9 +10,7 @@ $this->fileLayout = "layouts/home.php";
 
 <div class="panel panel-primary">
     <div class="panel-body">
-        <form style="border: 1px solid black; padding: 20px;" method="get" action="<?php echo getImgUrl('index.php') ?>">
-            <input type="hidden" class="form-control" name="controller" value="admin">
-            <input type="hidden" class="form-control" name="action" value="index">
+        <form style="border: 1px solid black; padding: 20px;" method="get" action="<?php echo getImgUrl('management/admin/search') ?>">
             <div class="form-horizontal">
                 <div class="row" style="margin-top:15px;">
                     <div class="col-md-2">Name</div>
@@ -50,23 +48,23 @@ $this->fileLayout = "layouts/home.php";
             <tr>
                 <th style="width: 50px;">
                     <a style="text-decoration: none; color:#34373a ;"
-                       href="<?php echo getImgUrl("index.php?controller=admin&action=index$search&column=id&order=$asc_or_desc") ?>">
+                       href="<?php echo getImgUrl('management/admin/search'.$search.'column=id&order='.$asc_or_desc) ?>">
                         ID <i
                                 class="fa fa-sort<?php echo $column == 'id' ? '-' . $sort_order : ''; ?>"
                                 aria-hidden="true"></i></a></th>
                 <th style="width: 100px;">Avatar</th>
                 <th style="width:200px;"><a style="text-decoration: none; color:#34373a ;"
-                                            href="<?php echo getImgUrl("index.php?controller=admin&action=index$search&column=name&order=$asc_or_desc") ?>">Name
+                                            href="<?php echo getImgUrl('management/admin/search'.$search.'column=name&order='.$asc_or_desc) ?>">Name
                         <i
                                 class="fa fa-sort<?php echo $column == 'name' ? '-' . $sort_order : ''; ?>"
                                 aria-hidden="true"></i></a></th>
                 <th style="width: 200px;"><a style="text-decoration: none; color:#34373a ;"
-                                             href="<?php echo getImgUrl("index.php?controller=admin&action=index$search&column=email&order=$asc_or_desc") ?>">Email
+                                             href="<?php echo getImgUrl('management/admin/search'.$search.'column=email&order='.$asc_or_desc) ?>">Email
                         <i
                                 class="fa fa-sort<?php echo $column == 'email' ? '-' . $sort_order : ''; ?>"
                                 aria-hidden="true"></i></a></th>
                 <th style="width: 100px;"><a style="text-decoration: none; color:#34373a ;"
-                                             href="<?php echo getImgUrl("index.php?controller=admin&action=index$search&column=role&order=$asc_or_desc") ?>">Role
+                                             href="<?php echo getImgUrl('management/admin/search'.$search.'column=role&order='.$asc_or_desc) ?>">Role
                         <i
                                 class="fa fa-sort<?php echo $column == 'role' ? '-' . $sort_order : ''; ?>"
                                 aria-hidden="true"></i></a></th>
@@ -106,6 +104,6 @@ $this->fileLayout = "layouts/home.php";
                 margin: 0px;
             }
         </style>
-        <?php require_once('views/admin/element/_pagination.php') ?>
+        <?php require_once('views/elements/_pagination.php') ?>
     </div>
 </div>

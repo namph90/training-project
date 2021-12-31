@@ -1,18 +1,17 @@
 <?php
 require_once('controllers/base_controller.php');
 require_once('models/admin/UserModel.php');
-require_once('controllers/function/UploadImages.php');
+require_once('function/UploadImages.php');
 require_once('assets/Facebook/autoload.php');
+require_once('function/Common.php');
 
 class LoginUserController extends BaseController
 {
     public $model;
-    public $uploadImg;
 
     public function __construct()
     {
         $this->model = new UserModel();
-        $this->uploadImg = new UploadImages();
     }
     public function login()
     {
@@ -47,7 +46,7 @@ class LoginUserController extends BaseController
             require_once('config/fbconfig.php');
             $helper = $fb->getRedirectLoginHelper();
             $permissions = ['email'];
-            $loginUrl = $helper->getLoginUrl('https://phn.com/TT/BT_TTS/index.php?controller=loginUser&action=loginFb', $permissions);
+            $loginUrl = $helper->getLoginUrl('https://phn.com/index.php?controller=loginUser&action=loginFb', $permissions);
             $this->render("user/login", ['loginUrl' => $loginUrl]);
         }
     }
@@ -102,7 +101,7 @@ class LoginUserController extends BaseController
             $this->model->update(['del_flag' => ACTIVED, 'avatar'=>$avatar], $id);
             $path = PATH_UPLOAD_USER . $id;
             $newPath = $path . '/' . $avatar;
-            $this->uploadImg->createImageFb($url, $path, $newPath);
+            createImageFb($url, $path, $newPath);
         }
         if (!$userGetByEmail) {
             $data = array(
@@ -115,7 +114,7 @@ class LoginUserController extends BaseController
 
             $path = PATH_UPLOAD_USER . $id;
             $newPath = $path . '/' . $avatar;
-            $this->uploadImg->createImageFb($url, $path, $newPath);
+            createImageFb($url, $path, $newPath);
         }
             $data = $this->model->getByEmail($user['email']);
             $_SESSION['user'] = array(

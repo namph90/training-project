@@ -19,24 +19,19 @@
                     <p class="form-group">
                         <label for="email">Email:</label>
                         <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email" value="<?php echo isset($_SESSION['email_create'])? $_SESSION['email_create']:'' ?>">
-                        <?php if (isset($_SESSION['err_email'])) : ?>
-                                <p style="color: #ff0000;">
-                                    <?php echo $_SESSION['err_email']?>
-                                </p>
+                        <?php if (isset($_SESSION['errLogin']['email'])) : ?>
+                            <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errLogin']['email']],true) ?>
                         <?php endif ?>
-                        <?php unset($_SESSION['err_email']) ?>
                         <?php unset($_SESSION['email_create']) ?>
 
                     </div>
                     <div class="form-group">
                         <label for="pwd">Password:</label>
                         <input type="password" class="form-control" id="pwd" name="password" placeholder="Enter Password">
-                        <?php if (isset($_SESSION['err_pass'])) : ?>
-                            <p style="color: #ff0000;">
-                                <?php echo $_SESSION['err_pass']?>
-                            </p>
+                        <?php if (isset($_SESSION['errLogin']['pass'])) : ?>
+                            <?php includeWithVariables(PATH_TO_BLADE."error.php",['err'=>$_SESSION['errLogin']['pass']],true) ?>
                         <?php endif ?>
-                        <?php unset($_SESSION['err_pass']) ?>
+                        <?php unset($_SESSION['errLogin']) ?>
                     </div>
                     <button class="btn btn-success" type="submit" name="submit">Login</button>
                 </div>

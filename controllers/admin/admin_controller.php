@@ -3,24 +3,21 @@
 require_once('controllers/base_controller.php');
 require_once('models/admin/AdminModel.php');
 require_once('controllers/Validated/AdminValidated.php');
-require_once('controllers/function/Paginate.php');
-require_once('controllers/function/UploadImages.php');
-require_once('controllers/function/Common.php');
+require_once('function/Paginate.php');
+require_once('function/UploadImages.php');
+require_once('function/Common.php');
+require_once('views/elements/error.php');
 require_once('config/config.php');
 
 class AdminController extends BaseController
 {
     public $model;
     public $validated;
-    public $uploadImg;
-    public $paginate;
 
     public function __construct()
     {
         $this->model = new AdminModel();
         $this->validated = new AdminValidated();
-        $this->uploadImg = new UploadImages();
-        $this->paginate = new Paginate();
         $this->authenticationAdmin();
         $this->checkRole();
     }
@@ -30,12 +27,10 @@ class AdminController extends BaseController
         $page = isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0 ? $_GET["page"] - 1 : 0;
         $from = $page * RECORDPERPAGE;
 
-        $result = $this->paginate->search();
+        $result = search();
         $columns = array('id', 'name', 'email', 'role');
-        $order = $this->paginate->order($columns);
-
+        $order = order($columns);
         $dataAdmin = $this->model->show($result['sqlSearch'], $order['sqlOrder'], $from, RECORDPERPAGE);
-
         $numPage = ceil($dataAdmin['count'] / RECORDPERPAGE);
         $arr = array(
             'data' => $dataAdmin['data'],
@@ -72,7 +67,7 @@ class AdminController extends BaseController
                 $id = $conn->lastInsertId();
                 $path = PATH_UPLOAD_ADMIN . $id;
                 $newPath = $path . '/' . $avatar;
-                $this->uploadImg->createImage($_FILES["avatar"], $path, $newPath);
+                createImage($_FILES["avatar"], $path, $newPath);
                 $_SESSION['success'] = CREATE_SUCCESSFUL;
                 unset($_SESSION['dl']);
                 header("location:search");
@@ -104,7 +99,7 @@ class AdminController extends BaseController
                         $path = PATH_UPLOAD_ADMIN . $id;
                         $pathOldAvatar = $path . '/' . $oldPhoto;
                         $pathNewAvatar = $path . '/' . $avatar;
-                        $this->uploadImg->updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
+                        updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
                     }
                 }
 
@@ -141,7 +136,7 @@ class AdminController extends BaseController
         $path = PATH_UPLOAD_ADMIN . $id;
 
         if ($result) {
-            $this->uploadImg->deleteImage($path);
+            deleteImage($path);
             $this->model->delete($id);
             if ($_SESSION['admin']['id'] == $id) {
                 unset($_SESSION['admin']);
@@ -149,6 +144,6 @@ class AdminController extends BaseController
                 $_SESSION['success'] = DELETE_SUCCESSFUL;
             }
         }
-        header("location:../search");
+            header("location:../search");
     }
 }

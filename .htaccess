@@ -3,23 +3,18 @@ RewriteCond %{HTTPS} off
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
 RewriteRule ^profile$ index.php?controller=user&action=details
 RewriteRule ^login$ index.php?controller=loginUser&action=login
-RewriteRule ^search$ index.php?controller=admin&action=index
 #login
-RewriteRule ^(management)/login$ index.php?controller=loginAdmin&action=login
+RewriteRule ^management/login$ index.php?controller=loginAdmin&action=login
 RewriteRule ^management/logout$ index.php?controller=loginAdmin&action=logout
 RewriteRule ^management/index$ index.php?controller=home&action=index
 #m_admin
-RewriteRule ^management/admin/search$ index.php?controller=admin&action=index
-RewriteRule ^management/admin/search/(.*)$ index.php?controller=admin&action=index$1
+RewriteRule ^management/admin/search$ index.php?controller=admin&action=index [QSA,L]
 RewriteRule ^management/admin/create$ index.php?controller=admin&action=create
 RewriteRule ^management/admin/edit/(.*)$ index.php?controller=admin&action=edit&id=$1
 RewriteRule ^management/admin/delete/(.*)$ index.php?controller=admin&action=delete&id=$1
 
 #m_user
-RewriteRule ^management/user/search$ index.php?controller=mUser&action=index
-RewriteRule ^management/user/search/(.*)$ index.php?controller=mUser&action=index$1
+RewriteRule ^management/user/search$ index.php?controller=mUser&action=index [QSA,L]
 RewriteRule ^management/user/create$ index.php?controller=mUser&action=create
 RewriteRule ^management/user/edit/(.*)$ index.php?controller=mUser&action=edit&id=$1
 RewriteRule ^management/user/delete/(.*)$ index.php?controller=mUser&action=delete&id=$1
-#RewriteRule ^user/(.*)$ index.php?controller=mUser&action=$1
-#RewriteRule ^user/(.*)/(.*)$ index.php?controller=mUser&action=$1&id=$2

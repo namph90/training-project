@@ -31,9 +31,9 @@ class UserValidated extends BaseValidated
             if ($file["size"] < 2048 || $file["size"] > 2097152) {
                 $_SESSION['errCreate']['image']['invaild'] = ERR_PASS_BETWEEN;
             }
-            if (!(strtoupper(substr($file['name'], -4)) == ".JPG"
-                || strtoupper(substr($file['name'], -5)) == ".JPEG"
-                || strtoupper(substr($file['name'], -4)) == ".PNG")) {
+            $fileName = explode(".",$file['name']);
+            $fileName = strtoupper($fileName[1]);
+            if (!($fileName == ".JPG" || $fileName)== ".JPEG" || $fileName == ".PNG") {
                 $_SESSION['errCreate']['image']['invaild'] = ERR_IMG_TYPE;
             }
         }
