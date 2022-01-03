@@ -1,4 +1,11 @@
 <?php
+require_once('models/AdminModel.php');
+require_once('function/Common.php');
+require_once('function/Paginate.php');
+require_once('function/UploadImages.php');
+require_once('views/elements/error.php');
+require_once('models/UserModel.php');
+require_once('assets/Facebook/autoload.php');
 
 class BaseController
 {

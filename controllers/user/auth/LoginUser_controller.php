@@ -1,9 +1,6 @@
 <?php
-require_once('controllers/base_controller.php');
-require_once('models/admin/UserModel.php');
-require_once('function/UploadImages.php');
-require_once('assets/Facebook/autoload.php');
-require_once('function/Common.php');
+require_once('controllers/Base_Controller.php');
+require_once('models/UserModel.php');
 
 class LoginUserController extends BaseController
 {
@@ -19,7 +16,7 @@ class LoginUserController extends BaseController
         if (isset($_POST['submit'])) {
             $email = $_POST['email'];
             $password = md5($_POST['password']);
-            $data = $this->model->loginPost($email, $password);
+            $data = $this->model->checkLogin($email, $password);
             $dataGetByEmailPass = $data['dataGetByEmailPass'];
             $dataGetByEmail = $data['dataGetByEmail'];
             $_SESSION['email_create'] = $email;
@@ -30,7 +27,6 @@ class LoginUserController extends BaseController
                     "email" => $dataGetByEmailPass->email
                 );
 
-                $_SESSION["mess"] = LOGIN_SUCCESSFUL;
                 unset($_SESSION['email_create']);
                 header("location:profile");
             } elseif (!isset($dataGetByEmail->id)) {
@@ -97,8 +93,8 @@ class LoginUserController extends BaseController
         $avatar = $user['id'] . '.jpg';
         $url = $picture['url'];
         $email = $user['email'];
-        $check = $this->model->getUserBanned($email);
-        $userGetByEmail = $this->model->getByEmail($email);
+        $check = $this->model->getUserBanned($email, "id");
+        $userGetByEmail = $this->model->getByEmail($email, "id");
         if ($check) {
             $id = $check->id;
             $this->model->update(['del_flag' => ACTIVED, 'avatar' => $avatar], $id);
@@ -119,12 +115,11 @@ class LoginUserController extends BaseController
             $newPath = $path . '/' . $avatar;
             createImageFb($url, $path, $newPath);
         }
-        $data = $this->model->getByEmail($user['email']);
+        $data = $this->model->getByEmail($user['email'], "id, email");
         $_SESSION['user'] = array(
             "id" => $data->id,
             "email" => $data->email
         );
-        $_SESSION["LoginSuccess"] = LOGIN_SUCCESSFUL;
         header("location:profile");
     }
 

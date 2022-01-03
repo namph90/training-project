@@ -1,5 +1,4 @@
 <?php
-require_once('config/config.php');
 require_once('models/BaseModel.php');
 
 class AdminModel extends BaseModel
@@ -10,10 +9,11 @@ class AdminModel extends BaseModel
         $this->tabelName = 'admin';
     }
 
-    public function loginPost($email, $pass)
+    public function checkLogin($email, $pass)
     {
-        $dataGetByEmailPass = $this->getByEmailAndPass($email, $pass);
-        $dataGetByEmail = $this->getByEmail($email);
+        $fields = "id, email, role";
+        $dataGetByEmailPass = $this->getByEmailAndPass($email, $pass, $fields);
+        $dataGetByEmail = $this->getByEmail($email, "id");
         return array(
             'dataGetByEmailPass' => $dataGetByEmailPass,
             'dataGetByEmail' => $dataGetByEmail
@@ -22,7 +22,7 @@ class AdminModel extends BaseModel
 //index
     public function list($sqlSearch, $sqlOrder, $from, $recordPerPage)
     {
-        $sql = "select * from $this->tabelName where del_flag = $this->active $sqlSearch $sqlOrder";
+        $sql = "select * from $this->tabelName where del_flag =". ACTIVED ." $sqlSearch $sqlOrder";
         $query = $this->conn->query("$sql limit  $from,$recordPerPage");
         $count = $this->conn->query($sql)->rowCount();
         $data = $query->fetchAll();

@@ -11,10 +11,6 @@
     <script src="/assets/vendor/bootstrap.min.js"></script>
 </head>
 <body>
-<?php if (isset($_SESSION["mess"])): ?>
-    <script type='text/javascript'>alert("<?php echo LOGIN_SUCCESSFUL ?>");</script>
-    <?php unset($_SESSION["mess"]); ?>
-<?php endif; ?>
 
 <nav class="navbar bg-light navbar-light">
     <ul class="nav justify-content-end">

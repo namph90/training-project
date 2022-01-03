@@ -1,9 +1,7 @@
 <?php
 
-require_once('controllers/base_controller.php');
-require_once('models/admin/UserModel.php');
-require_once('assets/Facebook/autoload.php');
-require_once('function/Common.php');
+require_once('controllers/Base_Controller.php');
+require_once('models/UserModel.php');
 
 class UserController extends BaseController
 {
@@ -18,7 +16,8 @@ class UserController extends BaseController
     public function details()
     {
         $id = $_SESSION['user']['id'];
-        $data = $this->model->getById($id);
+        $fields = "id, name, avatar, email";
+        $data = $this->model->getById($id, $fields);
         $this->render("user/detail", ['data' => $data]);
     }
 

@@ -1,10 +1,7 @@
 <?php
 
-require_once('controllers/base_controller.php');
-require_once('models/admin/AdminModel.php');
-require_once('config/mess.php');
-require_once('function/Common.php');
-require_once('views/elements/error.php');
+require_once('controllers/Base_Controller.php');
+require_once('models/AdminModel.php');
 
 class LoginAdminController extends BaseController
 {
@@ -20,7 +17,7 @@ class LoginAdminController extends BaseController
         if (isset($_POST['submit'])) {
             $email = $_POST['email'];
             $password = md5($_POST['password']);
-            $data = $this->model->loginPost($email, $password);
+            $data = $this->model->checkLogin($email, $password);
             $dataGetByEmailPass = $data['dataGetByEmailPass'];
             $dataGetByEmail = $data['dataGetByEmail'];
             $_SESSION['email_create'] = $email;
@@ -32,7 +29,6 @@ class LoginAdminController extends BaseController
                     "role" => $dataGetByEmailPass->role
                 );
 
-                $_SESSION["mess"] = LOGIN_SUCCESSFUL;
                 unset($_SESSION['email_create']);
                 header("location:index");
 

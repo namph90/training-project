@@ -14,7 +14,7 @@ RewriteRule ^management/admin/edit/(.*)$ index.php?controller=admin&action=edit&
 RewriteRule ^management/admin/delete/(.*)$ index.php?controller=admin&action=delete&id=$1
 
 #m_user
-RewriteRule ^management/user/search$ index.php?controller=mUser&action=index [QSA,L]
-RewriteRule ^management/user/create$ index.php?controller=mUser&action=create
-RewriteRule ^management/user/edit/(.*)$ index.php?controller=mUser&action=edit&id=$1
-RewriteRule ^management/user/delete/(.*)$ index.php?controller=mUser&action=delete&id=$1
+RewriteRule ^management/user/search$ index.php?controller=userAdmin&action=index [QSA,L]
+RewriteRule ^management/user/create$ index.php?controller=userAdmin&action=create
+RewriteRule ^management/user/edit/(.*)$ index.php?controller=userAdmin&action=edit&id=$1
+RewriteRule ^management/user/delete/(.*)$ index.php?controller=userAdmin&action=delete&id=$1

@@ -1,14 +1,10 @@
 <?php
 
-require_once('controllers/base_controller.php');
-require_once('models/admin/UserModel.php');
-require_once('controllers/Validated/UserValidated.php');
-require_once('function/Paginate.php');
-require_once('function/UploadImages.php');
-require_once('views/elements/error.php');
-require_once('function/Common.php');
+require_once('controllers/Base_Controller.php');
+require_once('models/UserModel.php');
+require_once('function/Validated/UserValidated.php');
 
-class mUserController extends BaseController
+class UserAdminController extends BaseController
 {
     public $model;
     public $validated;
@@ -41,7 +37,8 @@ class mUserController extends BaseController
     public function create()
     {
         if (isset($_POST['submit'])) {
-            $data = $this->model->getByEmail($_POST['email']);
+            $fields = "id";
+            $data = $this->model->getByEmail($_POST['email'],$fields);
             $this->validated->validateCreate($_POST, $data, $_FILES["avatar"]);
             $_SESSION['dl'] = $_POST;
 
@@ -81,7 +78,8 @@ class mUserController extends BaseController
     public function edit()
     {
         $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $admin = $this->model->getById($id);
+        $fields = "*";
+        $admin = $this->model->getById($id, $fields);
         if (isset($_POST['submit'])) {
             $password = $admin->password;
             $avatar = $admin->avatar;
@@ -90,15 +88,13 @@ class mUserController extends BaseController
             $this->validated->validateEdit($_POST, $_FILES["avatar"]);
 
             if (!isset($_SESSION['errCreate'])) {
-                if ($_FILES["avatar"]["name"] != "") {
-                    if ($admin) {
-                        $oldPhoto = $admin->avatar;
-                        $avatar = time() . "_" . $_FILES["avatar"]["name"];
-                        $path = PATH_UPLOAD_USER . $id;
-                        $pathOldAvatar = $path . '/' . $oldPhoto;
-                        $pathNewAvatar = $path . '/' . $avatar;
-                        updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
-                    }
+                if (($_FILES["avatar"]["name"] != "") && $admin) {
+                    $oldPhoto = $admin->avatar;
+                    $avatar = time() . "_" . $_FILES["avatar"]["name"];
+                    $path = PATH_UPLOAD_USER . $id;
+                    $pathOldAvatar = $path . '/' . $oldPhoto;
+                    $pathNewAvatar = $path . '/' . $avatar;
+                    updateImage($_FILES["avatar"], $path, $pathOldAvatar, $pathNewAvatar);
                 }
 
                 if (!empty($_POST['password'])) {
@@ -129,7 +125,8 @@ class mUserController extends BaseController
     public function delete()
     {
         $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $result = $this->model->getById($id);
+        $fields = "id";
+        $result = $this->model->getById($id, $fields);
         $path = PATH_UPLOAD_USER . $id;
 
         if ($result) {
