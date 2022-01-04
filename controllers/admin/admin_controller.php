@@ -53,7 +53,6 @@ class AdminController extends BaseController
                 if ($_FILES["avatar"]["name"] != "") {
                     $avatar = time() . "_" . $_FILES["avatar"]["name"];
                 }
-				
                 $arrInsert = array(
                     "name" => $_POST['name'],
                     "email" => $_POST['email'],

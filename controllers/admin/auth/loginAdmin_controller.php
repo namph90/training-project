@@ -35,11 +35,10 @@ class LoginAdminController extends BaseController
             } elseif (!isset($dataGetByEmail->id)) {
                 $_SESSION['errLogin']['email']['err'] = ERROR_LOGIN_EMAIL;
                 header("location:login");
-				
+
             } elseif (!isset($dataGetByEmailPass->id)) {
                 $_SESSION['errLogin']['pass']['err'] = ERROR_LOGIN_PASS;
                 header("location:login");
-				
             }
         } else {
             if (isset($_SESSION['admin'])) {

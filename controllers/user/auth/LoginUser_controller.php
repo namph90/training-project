@@ -30,21 +30,17 @@ class LoginUserController extends BaseController
 
                 unset($_SESSION['email_create']);
                 header("location:profile");
-				
             } elseif (!isset($dataGetByEmail->id)) {
                 $_SESSION['err_email'] = ERROR_LOGIN_EMAIL;
                 header("location:login");
-				
             } elseif (!isset($dataGetByEmailPass->id)) {
                 $_SESSION['err_pass'] = ERROR_LOGIN_PASS;
                 header("location:login");
-				
             }
         } else {
             if (isset($_SESSION['user'])) {
                 header("location:profile");
             }
-			
             require_once('config/fbconfig.php');
             $helper = $fb->getRedirectLoginHelper();
             $permissions = ['email'];

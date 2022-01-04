@@ -16,7 +16,7 @@ class UserController extends BaseController
     public function details()
     {
         $id = $_SESSION['user']['id'];
-        $fields = 'id, name, avatar, email';
+        $fields = "id, name, avatar, email";
         $data = $this->model->getById($id, $fields);
         $this->render("user/detail", ['data' => $data]);
     }
