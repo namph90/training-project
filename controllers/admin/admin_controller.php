@@ -28,7 +28,7 @@ class AdminController extends BaseController
         $dataAdmin = $this->model->list($result['sqlSearch'], $order['sqlOrder'], $from, RECORDPERPAGE);
         $numPage = ceil($dataAdmin['count'] / RECORDPERPAGE);
         $arr = array(
-            'data' => $dataAdmin['data'],
+            "data" => $dataAdmin['data'],
             "numPage" => $numPage,
             "column" => $order['column'],
             "asc_or_desc" => $order['asc_or_desc'],

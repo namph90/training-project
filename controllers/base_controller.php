@@ -53,7 +53,6 @@ class BaseController
     public function checkRole()
     {
         if (isset($_SESSION['admin']) && $_SESSION['admin']['role'] == "Admin") {
-            echo "<script type='text/javascript'>alert('you do not have permission to access');</script>";
             header("location:" . getImgUrl('management/index'));
         }
 
