@@ -1,4 +1,5 @@
 <?php
+
 require_once('models/AdminModel.php');
 require_once('function/Common.php');
 require_once('function/Paginate.php');
@@ -55,6 +56,5 @@ class BaseController
         if (isset($_SESSION['admin']) && $_SESSION['admin']['role'] == "Admin") {
             header("location:" . getImgUrl('management/index'));
         }
-
     }
 }

@@ -27,6 +27,7 @@ class AdminController extends BaseController
         $order = order($columns);
         $dataAdmin = $this->model->list($result['sqlSearch'], $order['sqlOrder'], $from, RECORDPERPAGE);
         $numPage = ceil($dataAdmin['count'] / RECORDPERPAGE);
+		
         $arr = array(
             "data" => $dataAdmin['data'],
             "numPage" => $numPage,
@@ -52,6 +53,7 @@ class AdminController extends BaseController
                 if ($_FILES["avatar"]["name"] != "") {
                     $avatar = time() . "_" . $_FILES["avatar"]["name"];
                 }
+				
                 $arrInsert = array(
                     "name" => $_POST['name'],
                     "email" => $_POST['email'],
