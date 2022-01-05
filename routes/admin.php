@@ -1,7 +1,7 @@
 <?php
 $controllersAdmin = array(
-    'home' => ['index', 'error'],
-    'admin' => ['index', 'create', 'edit', 'delete'],
-    'userAdmin' => ['index', 'create', 'edit', 'delete'],
+    'Home' => ['index', 'error'],
+    'Admin' => ['index', 'create', 'edit', 'delete'],
+    'UserAdmin' => ['index', 'create', 'edit', 'delete'],
     'prefix' => 'admin/'
 );

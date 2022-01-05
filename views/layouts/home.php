@@ -16,7 +16,7 @@
     <ul class="nav justify-content-end">
         <?php if (isset($_SESSION['admin']) && $_SESSION['admin']['role'] == "Super Admin"): ?>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="index.php" id="navbardrop" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" href="<?php echo getImgUrl('management/index') ?>" id="navbardrop" data-toggle="dropdown">
                     Admin management
                 </a>
                 <div class="dropdown-menu">
@@ -26,7 +26,7 @@
             </li>
         <?php endif; ?>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            <a class="nav-link dropdown-toggle" href="<?php echo getImgUrl('management/index') ?>" id="navbardrop" data-toggle="dropdown">
                 User management
             </a>
             <div class="dropdown-menu">

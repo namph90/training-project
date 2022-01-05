@@ -4,14 +4,14 @@ require_once("auth.php");
 require_once("user.php");
 $controllers = array_merge($controllersAuth, $controllersAdmin, $controllersUser);
 if ((!array_key_exists($controller, $controllers) || !in_array($action, $controllers[$controller], true))) {
-    $controller = 'home';
+    $controller = 'Home';
     $action = 'error';
 }
 $fileName = array (
-'fileNameAuth' => 'controllers/' . $controllersAuth['prefixAdmin'] . $controller . '_controller.php',
-'fileNameAdmin' => 'controllers/' . $controllersAdmin['prefix'] . $controller . '_controller.php',
-'fileNameUser' => 'controllers/' . $controllersUser['prefix'] . $controller . '_controller.php',
-'fileNameUserAuth' => 'controllers/' . $controllersAuth['prefixUser'] . $controller . '_controller.php',
+'fileNameAuth' => 'controllers/' . $controllersAuth['prefixAdmin'] . $controller . 'Controller.php',
+'fileNameAdmin' => 'controllers/' . $controllersAdmin['prefix'] . $controller . 'Controller.php',
+'fileNameUser' => 'controllers/' . $controllersUser['prefix'] . $controller . 'Controller.php',
+'fileNameUserAuth' => 'controllers/' . $controllersAuth['prefixUser'] . $controller . 'Controller.php',
 );
 foreach ($fileName as $key) {
     if (file_exists($key)) {

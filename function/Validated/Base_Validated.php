@@ -12,6 +12,8 @@ abstract class BaseValidated
             $_SESSION['errCreate']['email']['invaild'] = ERR_EMAIL_INVAILD;
         } elseif (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
             $_SESSION['errCreate']['email']['invaild'] = ERR_EMAIL_FORMAT;
+        } elseif (strlen(trim($email)) > 64) {
+            $_SESSION['errCreate']['email']['invaild'] = ERR_EMAIL_BETWEEN;
         } elseif ($data) {
             $_SESSION['errCreate']['email']['invaild'] = ERR_EMAIL_EXIST;
         }

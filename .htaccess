@@ -1,19 +1,20 @@
 RewriteEngine on
-RewriteCond %{HTTPS} off
-RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
-RewriteRule ^profile$ index.php?controller=user&action=details
-RewriteRule ^login$ index.php?controller=loginUser&action=login
+#RewriteCond %{HTTPS} off
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+RewriteRule ^profile$ index.php?controller=User&action=details
+RewriteRule ^login$ index.php?controller=LoginUser&action=login
+RewriteRule ^logout$ index.php?controller=LoginUser&action=logout
 #login
-RewriteRule ^management/login$ index.php?controller=loginAdmin&action=login
-RewriteRule ^management/logout$ index.php?controller=loginAdmin&action=logout
-RewriteRule ^management/index$ index.php?controller=home&action=index
+RewriteRule ^management/login$ index.php?controller=LoginAdmin&action=login
+RewriteRule ^management/logout$ index.php?controller=LoginAdmin&action=logout
+RewriteRule ^management/index$ index.php?controller=Home&action=index
 #m_admin
-RewriteRule ^management/admin/search$ index.php?controller=admin&action=index [QSA,L]
-RewriteRule ^management/admin/create$ index.php?controller=admin&action=create
-RewriteRule ^management/admin/edit/(.*)$ index.php?controller=admin&action=edit&id=$1
-RewriteRule ^management/admin/delete/(.*)$ index.php?controller=admin&action=delete&id=$1
+RewriteRule ^management/admin/search$ index.php?controller=Admin&action=index [QSA,L]
+RewriteRule ^management/admin/create$ index.php?controller=Admin&action=create
+RewriteRule ^management/admin/edit/(.*)$ index.php?controller=Admin&action=edit&id=$1
+RewriteRule ^management/admin/delete/(.*)$ index.php?controller=Admin&action=delete&id=$1
 #m_user
-RewriteRule ^management/user/search$ index.php?controller=userAdmin&action=index [QSA,L]
-RewriteRule ^management/user/create$ index.php?controller=userAdmin&action=create
-RewriteRule ^management/user/edit/(.*)$ index.php?controller=userAdmin&action=edit&id=$1
-RewriteRule ^management/user/delete/(.*)$ index.php?controller=userAdmin&action=delete&id=$1
+RewriteRule ^management/user/search$ index.php?controller=UserAdmin&action=index [QSA,L]
+RewriteRule ^management/user/create$ index.php?controller=UserAdmin&action=create
+RewriteRule ^management/user/edit/(.*)$ index.php?controller=UserAdmin&action=edit&id=$1
+RewriteRule ^management/user/delete/(.*)$ index.php?controller=UserAdmin&action=delete&id=$1

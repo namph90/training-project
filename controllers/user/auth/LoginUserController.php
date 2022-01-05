@@ -1,6 +1,6 @@
 <?php
 
-require_once('controllers/Base_Controller.php');
+require_once('controllers/BaseController.php');
 require_once('models/UserModel.php');
 
 class LoginUserController extends BaseController
@@ -19,7 +19,6 @@ class LoginUserController extends BaseController
             $password = md5($_POST['password']);
             $data = $this->model->checkLogin($email, $password);
             $dataGetByEmailPass = $data['dataGetByEmailPass'];
-            $dataGetByEmail = $data['dataGetByEmail'];
             $_SESSION['email_create'] = $email;
 
             if (isset($dataGetByEmailPass->id)) {
@@ -29,22 +28,23 @@ class LoginUserController extends BaseController
                 );
 
                 unset($_SESSION['email_create']);
-                header("location:profile");
-            } elseif (!isset($dataGetByEmail->id)) {
-                $_SESSION['err_email'] = ERROR_LOGIN_EMAIL;
-                header("location:login");
+                $this->redirect('profile');
+            } elseif (empty($_POST['email']) || empty($_POST['password'])) {
+                $_SESSION['errLogin']['err'] = ERROR_LOGIN_EMAIL;
+                $this->redirect('login');
+
             } elseif (!isset($dataGetByEmailPass->id)) {
-                $_SESSION['err_pass'] = ERROR_LOGIN_PASS;
-                header("location:login");
+                $_SESSION['errLogin']['err'] = ERROR_LOGIN_PASS;
+                $this->redirect('login');
             }
         } else {
             if (isset($_SESSION['user'])) {
-                header("location:profile");
+                $this->redirect('profile');
             }
             require_once('config/fbconfig.php');
             $helper = $fb->getRedirectLoginHelper();
             $permissions = ['email'];
-            $loginUrl = $helper->getLoginUrl('https://phn.com/index.php?controller=loginUser&action=loginFb', $permissions);
+            $loginUrl = $helper->getLoginUrl('https://6b76-14-248-83-33.ngrok.io/index.php?controller=LoginUser&action=loginFb', $permissions);
             $this->render("user/login", ['loginUrl' => $loginUrl]);
         }
     }
@@ -52,7 +52,7 @@ class LoginUserController extends BaseController
     public function logout()
     {
         unset($_SESSION["user"]);
-        header("location:login");
+        $this->redirect('login');
     }
 
     public function loginFb()
@@ -94,8 +94,8 @@ class LoginUserController extends BaseController
         $avatar = $user['id'] . '.jpg';
         $url = $picture['url'];
         $email = $user['email'];
-        $check = $this->model->getUserBanned($email, "id");
-        $userGetByEmail = $this->model->getByEmail($email, "id");
+        $check = $this->model->getUserBanned($email, ['id']);
+        $userGetByEmail = $this->model->getByEmail($email, ['id']);
         if ($check) {
             $id = $check->id;
             $this->model->update(['del_flag' => ACTIVED, 'avatar' => $avatar], $id);
@@ -116,11 +116,11 @@ class LoginUserController extends BaseController
             $newPath = $path . '/' . $avatar;
             createImageFb($url, $path, $newPath);
         }
-        $data = $this->model->getByEmail($user['email'], "id, email");
+        $data = $this->model->getByEmail($user['email'], ['id', 'email']);
         $_SESSION['user'] = array(
             "id" => $data->id,
             "email" => $data->email
         );
-        header("location:profile");
+        $this->redirect('profile');
     }
 }

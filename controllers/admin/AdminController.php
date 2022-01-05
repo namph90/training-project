@@ -1,6 +1,6 @@
 <?php
 
-require_once('controllers/Base_Controller.php');
+require_once('controllers/BaseController.php');
 require_once('models/AdminModel.php');
 require_once('function/Validated/AdminValidated.php');
 
@@ -22,18 +22,30 @@ class AdminController extends BaseController
         $page = isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0 ? $_GET["page"] - 1 : 0;
         $from = $page * RECORDPERPAGE;
 
-        $result = search();
+        $name = isset($_GET['searchName']) ? "?searchName=" . $_GET['searchName'] : "?";
+        $email = isset($_GET['searchEmail']) ? "&searchEmail=" . $_GET['searchEmail']."&" : "";
+        $searchName = isset($_GET["searchName"]) ? $_GET["searchName"] : "";
+        $searchEmail = isset($_GET["searchEmail"]) ? $_GET["searchEmail"] : "";
+        $search = $name . $email;
+
         $columns = array('id', 'name', 'email', 'role');
-        $order = order($columns);
-        $dataAdmin = $this->model->list($result['sqlSearch'], $order['sqlOrder'], $from, RECORDPERPAGE);
+        $column = isset($_GET['column']) && in_array($_GET['column'], $columns, true) ? $_GET['column'] : $columns[0];
+        $sort_order = isset($_GET['order']) && $_GET['order'] == 'desc' ? 'desc' : 'asc';
+        $asc_or_desc = $sort_order == 'asc' ? 'desc' : 'asc';
+
+        $conditions = ['searchName' => $searchName, 'searchEmail'=> $searchEmail];
+        $orerBy = ['column'=>$column, 'sort_order'=>$sort_order];
+
+        $dataAdmin = $this->model->list($conditions, $orerBy, $from, RECORDPERPAGE);
         $numPage = ceil($dataAdmin['count'] / RECORDPERPAGE);
+
         $arr = array(
             "data" => $dataAdmin['data'],
             "numPage" => $numPage,
-            "column" => $order['column'],
-            "asc_or_desc" => $order['asc_or_desc'],
-            "sort_order" => $order['sort_order'],
-            "search" => $result['search']
+            "column" => $column,
+            "asc_or_desc" => $asc_or_desc,
+            "sort_order" => $sort_order,
+            "search" => $search
         );
         $this->render("admin/m_admin/index", $arr);
     }
@@ -41,12 +53,12 @@ class AdminController extends BaseController
     public function create()
     {
         if (isset($_POST['submit'])) {
-            $fields = "id";
+            $fields = ['id'];
             $data = $this->model->getByEmail($_POST['email'], $fields);
-            $this->validated->validateCreate($_POST, $data, $_FILES["avatar"]);
+            $check = $this->validated->validateCreate($_POST, $data, $_FILES["avatar"]);
             $_SESSION['dl'] = $_POST;
 
-            if (!isset($_SESSION['errCreate'])) {
+            if ($check == true) {
                 $avatar = "";
                 $password = md5($_POST['password']);
                 if ($_FILES["avatar"]["name"] != "") {
@@ -68,9 +80,9 @@ class AdminController extends BaseController
 
                 $_SESSION['success'] = CREATE_SUCCESSFUL;
                 unset($_SESSION['dl']);
-                header("location:search");
+                $this->redirect('management/admin/search');
             } else {
-                header("location:create");
+                $this->redirect('management/admin/create');
             }
         } else {
             $action = "management/admin/create";
@@ -81,16 +93,16 @@ class AdminController extends BaseController
     public function edit()
     {
         $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $fields = "*";
+        $fields = ['id', 'name', 'email', 'role', 'avatar', 'password'];
         $admin = $this->model->getById($id, $fields);
         if (isset($_POST['submit'])) {
             $password = $admin->password;
             $avatar = $admin->avatar;
             $_SESSION['dl'] = $_POST;
 
-            $this->validated->validateEdit($_POST, $_FILES["avatar"]);
+            $check = $this->validated->validateEdit($_POST, $_FILES["avatar"]);
 
-            if (!isset($_SESSION['errCreate'])) {
+            if ($check == true) {
                 if (($_FILES["avatar"]["name"] != "") && $admin) {
                     $oldPhoto = $admin->avatar;
                     $avatar = time() . "_" . $_FILES["avatar"]["name"];
@@ -113,10 +125,10 @@ class AdminController extends BaseController
                 $this->model->update($arrUpdate, $id);
 
                 $_SESSION['success'] = UPDATE_SUCCESSFUL;
-                header("location:../search");
+                $this->redirect('management/admin/search');
                 unset($_SESSION['dl']);
             } else {
-                header("location:../edit/$id");
+                $this->redirect("management/admin/edit/$id");
             }
         } else {
             $action = "management/admin/edit/$id";
@@ -127,7 +139,7 @@ class AdminController extends BaseController
     public function delete()
     {
         $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $fields = "id";
+        $fields = ['id'];
         $result = $this->model->getById($id, $fields);
         $path = PATH_UPLOAD_ADMIN . $id;
 
@@ -140,6 +152,6 @@ class AdminController extends BaseController
                 $_SESSION['success'] = DELETE_SUCCESSFUL;
             }
         }
-        header("location:../search");
+        $this->redirect('management/admin/search');
     }
 }

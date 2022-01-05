@@ -12,13 +12,18 @@ class UserValidated extends BaseValidated
         $this->name($arr['name']);
         $this->image($file);
         $this->password_confirm($arr['password'], $arr['password_confirm']);
+        if(!isset($_SESSION['errCreate'])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function password($pass)
     {
         if (empty(trim($pass))) {
             $_SESSION['errCreate']['password']['invaild'] = ERR_PASS_INVAILD;
-        } elseif (strlen(trim($pass)) < 3 || strlen(trim($pass)) > 100) {
+        } elseif (strlen(trim($pass)) < 6 || strlen(trim($pass)) > 8) {
             $_SESSION['errCreate']['password']['invaild'] = ERR_PASS_BETWEEN;
         }
     }
@@ -27,7 +32,7 @@ class UserValidated extends BaseValidated
     {
         if (empty(trim($name))) {
             $_SESSION['errCreate']['name']['invaild'] = ERR_NAME_INVAILD;
-        } elseif (strlen(trim($name)) < 6 || strlen(trim($name)) > 200) {
+        } elseif (strlen(trim($name)) < 6 || strlen(trim($name)) > 256) {
             $_SESSION['errCreate']['name']['invaild'] = ERR_NAME_BETWEEN;
         }
     }
@@ -57,6 +62,11 @@ class UserValidated extends BaseValidated
         }
         if (!empty($file["name"])) {
             $this->image($file);
+        }
+        if(!isset($_SESSION['errCreate'])) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

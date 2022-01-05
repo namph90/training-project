@@ -8,7 +8,7 @@ class AdminValidated extends BaseValidated
     {
         if (empty(trim($name))) {
             $_SESSION['errCreate']['name']['invaild'] = ERR_NAME_INVAILD;
-        } elseif (strlen(trim($name)) < 6 || strlen(trim($name)) > 200) {
+        } elseif (strlen(trim($name)) < 6 || strlen(trim($name)) > 256) {
             $_SESSION['errCreate']['name']['invaild'] = ERR_NAME_BETWEEN;
         }
     }
@@ -45,6 +45,11 @@ class AdminValidated extends BaseValidated
         $this->name($arr['name']);
         $this->image($file);
         $this->password_confirm($arr['password'], $arr['password_confirm']);
+        if(!isset($_SESSION['errCreate'])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function validateEdit($arr, $file)
@@ -56,6 +61,11 @@ class AdminValidated extends BaseValidated
         }
         if (!empty($file["name"])) {
             $this->image($file);
+        }
+        if(!isset($_SESSION['errCreate'])) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

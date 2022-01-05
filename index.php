@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once('connection.php');
 require_once('config/config.php');
@@ -12,7 +13,7 @@ if (isset($_GET['controller'])) {
         $action = 'index';
     }
 } else {
-    $controller = 'loginUser';
+    $controller = 'LoginUser';
     $action = 'login';
 }
 require_once('routes/routes.php');

@@ -1,6 +1,6 @@
 <?php
 
-require_once('controllers/Base_Controller.php');
+require_once('controllers/BaseController.php');
 require_once('models/AdminModel.php');
 
 class LoginAdminController extends BaseController
@@ -19,7 +19,6 @@ class LoginAdminController extends BaseController
             $password = md5($_POST['password']);
             $data = $this->model->checkLogin($email, $password);
             $dataGetByEmailPass = $data['dataGetByEmailPass'];
-            $dataGetByEmail = $data['dataGetByEmail'];
             $_SESSION['email_create'] = $email;
 
             if (isset($dataGetByEmailPass->id)) {
@@ -30,19 +29,19 @@ class LoginAdminController extends BaseController
                 );
 
                 unset($_SESSION['email_create']);
-                header("location:index");
+                $this->redirect('management/index');
 
-            } elseif (!isset($dataGetByEmail->id)) {
-                $_SESSION['errLogin']['email']['err'] = ERROR_LOGIN_EMAIL;
-                header("location:login");
+            } elseif (empty($_POST['email']) || empty($_POST['password'])) {
+                $_SESSION['errLogin']['err'] = ERROR_LOGIN_EMAIL;
+                $this->redirect('management/login');
 
             } elseif (!isset($dataGetByEmailPass->id)) {
-                $_SESSION['errLogin']['pass']['err'] = ERROR_LOGIN_PASS;
-                header("location:login");
+                $_SESSION['errLogin']['err'] = ERROR_LOGIN_PASS;
+                $this->redirect('management/login');
             }
         } else {
             if (isset($_SESSION['admin'])) {
-                header("location:index");
+                $this->redirect('management/index');
             }
             $this->render("admin/login");
         }
@@ -51,6 +50,6 @@ class LoginAdminController extends BaseController
     public function logout()
     {
         unset($_SESSION["admin"]);
-        header("location:login");
+        $this->redirect('management/login');
     }
 }

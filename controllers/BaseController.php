@@ -2,7 +2,6 @@
 
 require_once('models/AdminModel.php');
 require_once('function/Common.php');
-require_once('function/Paginate.php');
 require_once('function/UploadImages.php');
 require_once('views/elements/error.php');
 require_once('models/UserModel.php');
@@ -32,29 +31,34 @@ class BaseController
                 echo $this->view;
             }
         } else {
-            header('Location: index.php?controller=home&action=error');
+            $this->redirect('index.php?controller=home&action=error');
         }
+    }
+
+    public function redirect ($path)
+    {
+        header("location:".getImgUrl($path));
     }
 
     public function authenticationAdmin()
     {
         $url = getImgUrl('management/login');
         if (!isset($_SESSION['admin'])) {
-            header("location:" . getImgUrl('management/login'));
+            $this->redirect('management/login');
         }
     }
 
     public function authenticationUser()
     {
         if (!isset($_SESSION['user'])) {
-            header("location:" . getImgUrl('login'));
+            $this->redirect('login');
         }
     }
 
     public function checkRole()
     {
         if (isset($_SESSION['admin']) && $_SESSION['admin']['role'] == "Admin") {
-            header("location:" . getImgUrl('management/index'));
+            $this->redirect('management/index');
         }
     }
 }

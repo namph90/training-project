@@ -1,6 +1,5 @@
 <?php
 
-require_once('config/config.php');
 require_once('models/DBInterface.php');
 
 abstract class BaseModel implements BDInterface
@@ -13,32 +12,29 @@ abstract class BaseModel implements BDInterface
         $this->conn = DB::getInstance();
     }
 
-    public function getById($id, $fields)
+    public function getById($id, $arr)
     {
+        //vì hàm này dùng cho các bảng khác nhau mà mỗi bảng lại có các trường khác nhau nên không select các trường cụ thể được
+        $fields = implode(", ", $arr);
         $query = $this->conn->prepare("select $fields from $this->tabelName where  id =:_id and del_flag =:_del_flag");
         $query->execute(array('_id' => $id, '_del_flag' => ACTIVED));
         return $query->fetch();
     }
 
-    public function getByEmail($email, $fields)
+    public function getByEmail($email, $arr)
     {
+        $fields = implode(", ", $arr);
         $query = $this->conn->prepare("select $fields from $this->tabelName where  email =:_email and del_flag =:_del_flag");
         $query->execute(array('_email' => $email, '_del_flag' => ACTIVED));
         return $query->fetch();
     }
 
-    public function getByEmailAndPass($email, $pass, $fields)
+    public function getByEmailAndPass($email, $pass, $arr)
     {
+        $fields = implode(", ", $arr);
         $query = $this->conn->prepare("select $fields from $this->tabelName where  email =:_email and password =:_password and del_flag =:_del_flag");
         $query->execute(array('_email' => $email, '_password' => $pass, '_del_flag' => ACTIVED));
         return $query->fetch();
-    }
-
-    public function getAll($fields)
-    {
-        $query = $this->conn->prepare("select $fields from $this->tabelName where del_flag =:_del_flag");
-        $query->execute(array('_del_flag' => ACTIVED));
-        return $query->fetchAll();
     }
 
     public function create($data)

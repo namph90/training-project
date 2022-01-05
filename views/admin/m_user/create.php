@@ -73,10 +73,10 @@ $this->fileLayout = "layouts/home.php";
                                         <div class="col-md-2">Status</div>
                                         <div class="col-md-10">
                                             <input type="radio" name="status"
-                                                   value="Active" <?php echo isset($data->status) && $data->status == "Active" ? "checked" : "" ?>>Active
+                                                   value="Active" <?php echo isset($data->status) && $data->status == "Active" ? "checked" : "" ?>> Active
                                             <input type="radio" name="status"
                                                    style="margin-left: 50px;" <?php echo isset($data->status) && $data->status == "Banned" ? "checked" : "" ?>
-                                                   value="Banned" <?php if(!isset($data->status)): ?> checked <?php endif; ?>>Banned
+                                                   value="Banned" <?php if(!isset($data->status)): ?> checked <?php endif; ?>> Banned
                                         </div>
                                     </div>
                                     <div class="row" style="margin-top:15px;">

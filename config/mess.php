@@ -1,7 +1,7 @@
 <?php
 define('LOGIN_SUCCESSFUL', 'login successfull');
-define('ERROR_LOGIN_EMAIL', 'The email or password entered is not associated with any accounts. Find your account and log in.');
-define('ERROR_LOGIN_PASS', 'The password entered is incorrect. Forgot password?');
+define('ERROR_LOGIN_EMAIL', 'The password and email can not be blank!');
+define('ERROR_LOGIN_PASS', 'The password and email entered is incorrect. Forgot password?');
 define('CREATE_SUCCESSFUL', 'Create successful!');
 define('UPDATE_SUCCESSFUL', 'Update successful!');
 define('DELETE_SUCCESSFUL', 'Delete successful!');
@@ -10,6 +10,7 @@ define('ERR_NAME_INVAILD', 'Name can not be blank!');
 define('ERR_NAME_BETWEEN', 'Name must be between 6 and 200 characters!');
 define('ERR_EMAIL_INVAILD', 'Email can not be blank!');
 define('ERR_EMAIL_FORMAT', 'Invalid email format!');
+define('ERR_EMAIL_BETWEEN', 'Email be max 64 characters!');
 define('ERR_EMAIL_EXIST', 'Email exist!');
 define('ERR_PASS_INVAILD', 'Password can not be blank!');
 define('ERR_PASS_BETWEEN', 'Password must be between 3 and 100 characters!');

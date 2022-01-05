@@ -1,5 +1,5 @@
 <?php
 $controllersUser = array(
-    'user' => ['details'],
+    'User' => ['details'],
     'prefix' => 'user/'
 );

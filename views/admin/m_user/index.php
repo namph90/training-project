@@ -30,13 +30,7 @@ $this->fileLayout = "layouts/home.php";
                     <div class="col-md-2"></div>
                     <div class="col-md-10">
                         <input type="submit" value="Search" class="btn btn-primary">
-                        <input type="submit" value="Reset" class="btn btn-danger" onclick="Reset()">
-                        <script>
-                            function Reset() {
-                                document.getElementsByClassName("searchName")[0].removeAttribute("value");
-                                document.getElementsByClassName("searchEmail")[0].removeAttribute("value");
-                            }
-                        </script>
+                        <a href="<?php echo getImgUrl('management/user/search') ?>"><input type="button" value="Reset" class="btn btn-danger"></a>
                     </div>
                 </div>
             </div>
@@ -84,17 +78,17 @@ $this->fileLayout = "layouts/home.php";
             <?php if (!empty($data)): ?>
                 <?php foreach ($data as $rows): ?>
                     <tr>
-                        <td><?php echo $rows->id ?></td>
+                        <td style="vertical-align: middle;"><?php echo $rows->id ?></td>
                         <td style="text-align: center;">
                             <?php if (file_exists(PATH_UPLOAD_USER . $rows->id . "/" . $rows->avatar)): ?>
                                 <img src="<?php echo getImgUrl(PATH_UPLOAD_USER . $rows->id . "/" . $rows->avatar); ?>"
-                                     style="width: 70px;">
+                                     style="width: 70px; height: 70px;">
                             <?php endif; ?>
                         </td>
-                        <td class="highlight"><?php echo $rows->name ?></td>
-                        <td><?php echo $rows->email ?></td>
-                        <td><?php echo $rows->status ?></td>
-                        <td style="text-align:center;">
+                        <td class="highlight" style="text-align: left; vertical-align: middle;"><?php echo $rows->name ?></td>
+                        <td style="vertical-align: middle;"><?php echo $rows->email ?></td>
+                        <td style="vertical-align: middle;"><?php echo $rows->status ?></td>
+                        <td style="text-align:center; vertical-align: middle;">
                             <a href="<?php echo getImgUrl("management/user/edit/$rows->id") ?>"><i
                                         class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;
                             <a href="<?php echo getImgUrl("management/user/delete/$rows->id") ?>"

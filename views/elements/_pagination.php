@@ -1,4 +1,5 @@
-<ul class="pagination">
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
     <li class="page-item disabled"><a href="#" class="page-link">Trang</a></li>
     <?php
     $url = explode("&page", $_SERVER["REQUEST_URI"]);
@@ -19,4 +20,4 @@
         <?php endfor; ?>
     <?php endif; ?>
 
-</ul>
+</ul></nav>

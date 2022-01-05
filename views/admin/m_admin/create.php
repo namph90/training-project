@@ -73,11 +73,11 @@ $this->fileLayout = "layouts/home.php";
                                         <div class="col-md-2">Role</div>
                                         <div class="col-md-10">
                                             <input type="radio" name="role"
-                                                   value="Super Admin" <?php echo isset($data->role) && $data->role == "Super Admin" ? "checked" : "" ?>>Super
+                                                   value="Super Admin" <?php echo isset($data->role) && $data->role == "Super Admin" ? "checked" : "" ?>> Super
                                             Admin
                                             <input type="radio" name="role"
                                                    style="margin-left: 50px;" <?php echo isset($data->role) && $data->role == "Admin" ? "checked" : "" ?>
-                                                   value="Admin" <?php if (!isset($data->role)): ?> checked <?php endif; ?>>Admin
+                                                   value="Admin" <?php if (!isset($data->role)): ?> checked <?php endif; ?>> Admin
                                         </div>
                                     </div>
                                     <div class="row" style="margin-top:15px;">

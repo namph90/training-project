@@ -1,6 +1,6 @@
 <?php
 
-require_once('controllers/Base_Controller.php');
+require_once('controllers/BaseController.php');
 require_once('models/UserModel.php');
 require_once('function/Validated/UserValidated.php');
 
@@ -18,18 +18,28 @@ class UserAdminController extends BaseController
 
     public function index()
     {
-        $result = search();
+        $name = isset($_GET['searchName']) ? "?searchName=" . $_GET['searchName'] : "?";
+        $email = isset($_GET['searchEmail']) ? "&searchEmail=" . $_GET['searchEmail'] . "&" : "";
+        $searchName = isset($_GET["searchName"]) ? $_GET["searchName"] : "";
+        $searchEmail = isset($_GET["searchEmail"]) ? $_GET["searchEmail"] : "";
+        $search = $name . $email;
 
         $columns = array('id', 'name', 'email', 'status');
-        $order = order($columns);
 
-        $data = $this->model->list($result['sqlSearch'], $order['sqlOrder']);
+        $column = isset($_GET['column']) && in_array($_GET['column'], $columns, true) ? $_GET['column'] : $columns[0];
+        $sort_order = isset($_GET['order']) && $_GET['order'] == 'desc' ? 'desc' : 'asc';
+        $asc_or_desc = $sort_order == 'asc' ? 'desc' : 'asc';
+
+        $conditions = ['searchName' => $searchName, 'searchEmail' => $searchEmail];
+        $orerBy = ['column' => $column, 'sort_order' => $sort_order];
+        $data = $this->model->list($conditions, $orerBy);
+
         $arr = array(
             'data' => $data,
-            'column' => $order['column'],
-            'asc_or_desc' => $order['asc_or_desc'],
-            'sort_order' => $order['sort_order'],
-            'search' => $result['search']
+            'column' => $column,
+            'asc_or_desc' => $asc_or_desc,
+            'sort_order' => $sort_order,
+            'search' => $search
         );
         $this->render("admin/m_user/index", $arr);
     }
@@ -37,12 +47,11 @@ class UserAdminController extends BaseController
     public function create()
     {
         if (isset($_POST['submit'])) {
-            $fields = "id";
-            $data = $this->model->getByEmail($_POST['email'],$fields);
-            $this->validated->validateCreate($_POST, $data, $_FILES["avatar"]);
+            $data = $this->model->getByEmail($_POST['email'], ['id']);
+            $check = $this->validated->validateCreate($_POST, $data, $_FILES["avatar"]);
             $_SESSION['dl'] = $_POST;
 
-            if (!isset($_SESSION['errCreate'])) {
+            if ($check == true) {
                 $avatar = "";
                 $password = md5($_POST['password']);
                 if ($_FILES["avatar"]["name"] != "") {
@@ -64,9 +73,9 @@ class UserAdminController extends BaseController
 
                 $_SESSION['success'] = CREATE_SUCCESSFUL;
                 unset($_SESSION['dl']);
-                header("location:search");
+                $this->redirect('management/user/search');
             } else {
-                header("location:create");
+                $this->redirect('management/user/create');
             }
         } else {
             $action = "management/user/create";
@@ -77,16 +86,16 @@ class UserAdminController extends BaseController
     public function edit()
     {
         $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $fields = "*";
+        $fields = ['id', 'name', 'email', 'password', 'status', 'avatar'];
         $admin = $this->model->getById($id, $fields);
         if (isset($_POST['submit'])) {
             $password = $admin->password;
             $avatar = $admin->avatar;
             $_SESSION['dl'] = $_POST;
 
-            $this->validated->validateEdit($_POST, $_FILES["avatar"]);
+            $check = $this->validated->validateEdit($_POST, $_FILES["avatar"]);
 
-            if (!isset($_SESSION['errCreate'])) {
+            if ($check == true) {
                 if (($_FILES["avatar"]["name"] != "") && $admin) {
                     $oldPhoto = $admin->avatar;
                     $avatar = time() . "_" . $_FILES["avatar"]["name"];
@@ -109,10 +118,10 @@ class UserAdminController extends BaseController
                 $this->model->update($arrUpdate, $id);
 
                 $_SESSION['success'] = UPDATE_SUCCESSFUL;
-                header("location:../search");
+                $this->redirect('management/user/search');
                 unset($_SESSION['dl']);
             } else {
-                header("location:../edit/$id");
+                $this->redirect("management/user/edit/$id");
             }
 
         } else {
@@ -124,8 +133,7 @@ class UserAdminController extends BaseController
     public function delete()
     {
         $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $fields = "id";
-        $result = $this->model->getById($id, $fields);
+        $result = $this->model->getById($id, ['id']);
         $path = PATH_UPLOAD_USER . $id;
 
         if ($result) {
@@ -133,6 +141,6 @@ class UserAdminController extends BaseController
             $this->model->delete($id);
             $_SESSION['success'] = DELETE_SUCCESSFUL;
         }
-        header("location:../search");
+        $this->redirect('management/user/search');
     }
 }
