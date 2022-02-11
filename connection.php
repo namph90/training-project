@@ -18,3 +18,4 @@ class DB
         return self::$instance;
     }
 }
+//update fix 2
