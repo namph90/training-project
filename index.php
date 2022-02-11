@@ -17,3 +17,4 @@ if (isset($_GET['controller'])) {
     $action = 'login';
 }
 require_once('routes/routes.php');
+//update bug 1
